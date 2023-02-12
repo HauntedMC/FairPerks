@@ -1,6 +1,7 @@
 package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
+import nl.hauntedmc.fairperks.util.LegacyUtil;
 
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -27,7 +28,7 @@ public class TargetListener implements Listener {
 
         Entity entity = event.getEntity();
 
-        if (entity instanceof Enemy) {
+        if (LegacyUtil.ENEMY.contains(entity.getType())) {
             if (this.plugin.getEssentialsHook().getUser(player).isGodModeEnabled() || player.isFlying()) {
                 event.setTarget(null);
                 event.setCancelled(true);

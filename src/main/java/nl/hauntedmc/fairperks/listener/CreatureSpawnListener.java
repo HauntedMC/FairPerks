@@ -1,8 +1,8 @@
 package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
+import nl.hauntedmc.fairperks.util.LegacyUtil;
 
-import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,7 +25,7 @@ public class CreatureSpawnListener implements Listener {
     public void onCreatureSpawn(CreatureSpawnEvent event){
         if (event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.SPAWNER) {
             Entity spawnerMob = event.getEntity();
-            if (spawnerMob instanceof Enemy) {
+            if (LegacyUtil.ENEMY.contains(spawnerMob.getType())) {
                 MetadataValue metadataValue = createCustomMetadataValue(this.plugin);
                 setSpawnermob(spawnerMob, metadataValue);
             }

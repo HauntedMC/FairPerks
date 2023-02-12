@@ -1,10 +1,12 @@
 package nl.hauntedmc.fairperks.listener;
 
+import nl.hauntedmc.fairperks.FairPerks;
+import nl.hauntedmc.fairperks.util.LegacyUtil;
+
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import nl.hauntedmc.fairperks.FairPerks;
+
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -27,7 +29,7 @@ public class ProjectileListener implements Listener {
     public void onProjectileHit(ProjectileHitEvent event) {
         Entity damagedEntity = event.getHitEntity();
 
-        if (damagedEntity instanceof Enemy) {
+        if (damagedEntity != null && LegacyUtil.ENEMY.contains(damagedEntity.getType())) {
             if (!isSpawnermob(damagedEntity)) {
                 Projectile projectile = event.getEntity();
 

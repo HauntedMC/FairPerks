@@ -1,12 +1,12 @@
 package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
+import nl.hauntedmc.fairperks.util.LegacyUtil;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,7 +42,7 @@ public class BlockIgniteListener implements Listener {
 
             final String denyMessage = ChatColor.RED + "Je kunt geen vuur aansteken bij mobs %s.";
 
-            if (nearbyEntities.stream().anyMatch(entity -> entity instanceof Enemy)) {
+            if (nearbyEntities.stream().anyMatch(entity -> LegacyUtil.ENEMY.contains(entity.getType()))) {
                 if (this.plugin.getEssentialsHook().getUser(damager).isGodModeEnabled()) {
                     event.setCancelled(true);
                     //noinspection deprecation

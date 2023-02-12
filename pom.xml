@@ -13,7 +13,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <paper.version>1.19.3-R0.1-SNAPSHOT</paper.version>
+        <paper.version>1.19.2-R0.1-SNAPSHOT</paper.version>
     </properties>
 
     <distributionManagement>

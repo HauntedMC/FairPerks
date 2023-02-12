@@ -1,13 +1,13 @@
 package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
+import nl.hauntedmc.fairperks.util.LegacyUtil;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,7 +35,7 @@ public class TntIgniteListener implements Listener {
         final int entityRange = this.plugin.getConfig().getInt("tnt_entityrange");
         List<Entity> nearbyEntities = player.getNearbyEntities(entityRange, entityRange, entityRange);
 
-        if (nearbyEntities.stream().anyMatch(entity -> entity instanceof Enemy)) {
+        if (nearbyEntities.stream().anyMatch(entity -> LegacyUtil.ENEMY.contains(entity.getType()))) {
             if (event.getAction() == Action.LEFT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_BLOCK) {
                 if (event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.TNT) {
                     if (holdsIgniter(player)) {
