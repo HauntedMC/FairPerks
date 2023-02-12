@@ -15,7 +15,6 @@ import org.jetbrains.annotations.NotNull;
 public class GodMacroCommand implements CommandExecutor {
 
     private final FairPerks plugin;
-    private final String toggleMessage = ChatColor.YELLOW + "De god macro (dubbelshift) is nu %s.";
 
     public GodMacroCommand(FairPerks plugin) {
         this.plugin = plugin;
@@ -28,6 +27,8 @@ public class GodMacroCommand implements CommandExecutor {
                 NamespacedKey key = new NamespacedKey(this.plugin, "godmacro");
                 PersistentDataContainer playerMeta = player.getPersistentDataContainer();
 
+                final String toggleMessage = ChatColor.YELLOW + "De god macro (dubbelshift) is nu %s.";
+
                 if (playerMeta.has(key, PersistentDataType.STRING)) {
                     String macroStatus = playerMeta.get(key, PersistentDataType.STRING);
 
@@ -38,6 +39,9 @@ public class GodMacroCommand implements CommandExecutor {
                         playerMeta.set(key, PersistentDataType.STRING, "true");
                         player.sendMessage(String.format(toggleMessage,  "ingeschakeld"));
                     }
+                } else {
+                    playerMeta.set(key, PersistentDataType.STRING, "true");
+                    player.sendMessage(String.format(toggleMessage,  "ingeschakeld"));
                 }
             }
         }
