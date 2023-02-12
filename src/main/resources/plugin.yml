@@ -3,3 +3,9 @@ main: ${project.groupId}.${project.name}
 version: ${project.version}
 author: HauntedMC
 api-version: 1.19
+
+commands:
+  godmacro:
+    description: Zet de god macro aan of uit
+    usage: /<command>
+    permission: fairperks.godmacro

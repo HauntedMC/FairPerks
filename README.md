@@ -1,4 +1,4 @@
-# PaperTemplate
+# FairPerks
 
 Introduce EULA-friendly player perks like fly and godmode to your server
 

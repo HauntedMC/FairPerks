@@ -1,0 +1,19 @@
+enabled:
+  bed: true
+  blockignite: true
+  spawnermobs: true
+  creeperignite: true
+  endcrystal: true
+  godmacro: true
+  lava: true
+  melee: true
+  projectile: true
+  target: true
+  tntignite: true
+ignite_entityrange: 5
+tnt_entityrange: 10
+lava_entityrange: 5
+blockignite:
+  - FLINT_AND_STEEL
+  - FIREBALL
+godmacrointerval: 350
