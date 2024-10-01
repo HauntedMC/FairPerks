@@ -12,7 +12,7 @@ public class LegacyUtil {
             EntityType.HUSK, EntityType.PILLAGER, EntityType.ILLUSIONER, EntityType.MAGMA_CUBE, EntityType.PHANTOM,
             EntityType.PIGLIN, EntityType.PIGLIN_BRUTE, EntityType.ZOMBIFIED_PIGLIN, EntityType.RAVAGER,
             EntityType.SHULKER, EntityType.SILVERFISH, EntityType.SKELETON, EntityType.SLIME, EntityType.SPIDER,
-            EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR, EntityType.WARDEN, EntityType.WITCH,
-            EntityType.WITCH, EntityType.WITHER_SKELETON, EntityType.ZOGLIN, EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER);
-
+            EntityType.STRAY, EntityType.VEX, EntityType.VINDICATOR, EntityType.WITCH,
+            EntityType.WARDEN, EntityType.WITHER, EntityType.WITHER_SKELETON, EntityType.ZOGLIN,
+            EntityType.ZOMBIE, EntityType.ZOMBIE_VILLAGER);
 }
