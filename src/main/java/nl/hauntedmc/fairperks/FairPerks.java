@@ -18,7 +18,7 @@ public class FairPerks extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.getLogger().info("FairGod wordt geladen.");
+        this.getLogger().info("FairPerks wordt geladen.");
         initializeConfig();
         registerPluginHooks();
         registerListeners();
@@ -57,6 +57,9 @@ public class FairPerks extends JavaPlugin {
     }
 
     private void registerListeners() {
+        if (this.getConfig().getBoolean("enabled.anchor")) {
+            this.getServer().getPluginManager().registerEvents(new AnchorInteractListener(this), this);
+        }
         if (this.getConfig().getBoolean("enabled.bed")) {
             this.getServer().getPluginManager().registerEvents(new BedInteractListener(this), this);
         }

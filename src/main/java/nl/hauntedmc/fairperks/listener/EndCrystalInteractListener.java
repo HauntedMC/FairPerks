@@ -26,7 +26,7 @@ public class EndCrystalInteractListener implements Listener {
     public void crystalDamage(EntityDamageByEntityEvent event) {
         Entity entity = event.getEntity();
 
-        if (entity.getType() == EntityType.ENDER_CRYSTAL) {
+        if (entity.getType() == EntityType.END_CRYSTAL) {
 
             Player player;
 

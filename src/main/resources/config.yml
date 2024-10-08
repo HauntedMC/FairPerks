@@ -1,4 +1,5 @@
 enabled:
+  anchor: true
   bed: true
   blockignite: true
   spawnermobs: true
