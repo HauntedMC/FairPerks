@@ -29,7 +29,7 @@ public class GodMacroListener implements Listener {
     public void onPlayerShiftToggleGod(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
 
-        if (player.hasPermission("essentials.god") && player.hasPermission("fairgod.godmacro")) {
+        if (player.hasPermission("essentials.god") && player.hasPermission("fairperks.godmacro")) {
             if (!isInCombat(player, this.plugin)) {
                 NamespacedKey key = new NamespacedKey(this.plugin, "godmacro");
                 PersistentDataContainer playerMeta = player.getPersistentDataContainer();
