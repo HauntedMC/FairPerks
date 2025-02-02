@@ -11,6 +11,7 @@ public class LegacyUtil {
             EntityType.BOGGED,
             EntityType.BREEZE,
             EntityType.CAVE_SPIDER,
+            EntityType.CREAKING,
             EntityType.CREEPER,
             EntityType.DROWNED,
             EntityType.ELDER_GUARDIAN,
