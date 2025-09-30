@@ -35,6 +35,7 @@ public class LegacyUtil {
             EntityType.SHULKER,
             EntityType.SILVERFISH,
             EntityType.SKELETON,
+            EntityType.SKELETON_HORSE,
             EntityType.SLIME,
             EntityType.SPIDER,
             EntityType.STRAY,
