@@ -8,6 +8,7 @@ enabled:
   creeperignite: true
   endcrystal: true
   godmacro: true
+  godrestorefix: true
   lava: true
   melee: true
   perktoggleguard: true

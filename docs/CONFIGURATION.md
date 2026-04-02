@@ -41,6 +41,7 @@ Most behavior is controlled by the `enabled` section:
 - `creeperignite`: flint/fire-charge creeper ignite protection.
 - `endcrystal`: end crystal damage protection.
 - `godmacro`: double-shift god command macro.
+- `godrestorefix`: restores pre-toggle health/hunger after enabling Essentials god, preventing heal/refill abuse from toggling.
 - `lava`: lava bucket placement protection.
 - `melee`: melee combat restriction logic.
 - `perktoggleguard`: blocks enabling Essentials god/fly while in combat or near hostile mobs.

@@ -8,6 +8,7 @@ import nl.hauntedmc.fairperks.listener.CreeperIgniteListener;
 import nl.hauntedmc.fairperks.listener.CreatureSpawnListener;
 import nl.hauntedmc.fairperks.listener.EndCrystalInteractListener;
 import nl.hauntedmc.fairperks.listener.GodMacroListener;
+import nl.hauntedmc.fairperks.listener.GodRestoreFixListener;
 import nl.hauntedmc.fairperks.listener.LavaPlaceListener;
 import nl.hauntedmc.fairperks.listener.MeleeListener;
 import nl.hauntedmc.fairperks.listener.PerkToggleGuardListener;
@@ -101,6 +102,7 @@ public class FairPerks extends JavaPlugin {
         registerListenerIfEnabled("enabled.creeperignite", new CreeperIgniteListener(this));
         registerListenerIfEnabled("enabled.endcrystal", new EndCrystalInteractListener(this));
         registerListenerIfEnabled("enabled.godmacro", new GodMacroListener(this));
+        registerListenerIfEnabled("enabled.godrestorefix", new GodRestoreFixListener(this));
         registerListenerIfEnabled("enabled.lava", new LavaPlaceListener(this));
         registerListenerIfEnabled("enabled.melee", new MeleeListener(this));
         registerListenerIfEnabled("enabled.perktoggleguard", new PerkToggleGuardListener(this));
