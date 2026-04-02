@@ -6,6 +6,7 @@ import nl.hauntedmc.fairperks.listener.*;
 
 import com.earth2me.essentials.Essentials;
 
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,6 +21,9 @@ public class FairPerks extends JavaPlugin {
         this.getLogger().info("FairPerks wordt geladen.");
         initializeConfig();
         registerPluginHooks();
+        if (!isEnabled()) {
+            return;
+        }
         registerListeners();
         registerCommands();
     }
@@ -97,7 +101,12 @@ public class FairPerks extends JavaPlugin {
 
     private void registerCommands() {
         if (this.getConfig().getBoolean("enabled.godmacro")) {
-            this.getCommand("godmacro").setExecutor(new GodMacroCommand(this));
+            PluginCommand godMacroCommand = this.getCommand("godmacro");
+            if (godMacroCommand == null) {
+                getLogger().warning("Commando 'godmacro' ontbreekt in plugin.yml; godmacro wordt niet geregistreerd.");
+                return;
+            }
+            godMacroCommand.setExecutor(new GodMacroCommand(this));
         }
     }
 

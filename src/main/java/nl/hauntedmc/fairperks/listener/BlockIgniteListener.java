@@ -16,6 +16,7 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 
 import java.util.List;
+import java.util.Locale;
 
 public class BlockIgniteListener implements Listener {
 
@@ -27,32 +28,56 @@ public class BlockIgniteListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onBlockIgniteNearMobs(BlockIgniteEvent event) {
-        @SuppressWarnings("unchecked")
-        List<IgniteCause> list = (List<IgniteCause>) this.plugin.getConfig().getList("blockignite");
+        if (!isConfiguredCause(event.getCause())) {
+            return;
+        }
 
-        if (list != null && list.contains(event.getCause())) {
-            Player damager = event.getPlayer();
+        Player damager = event.getPlayer();
 
-            if (damager == null) {
-                return;
+        if (damager == null) {
+            return;
+        }
+
+        final int entityRange = this.plugin.getConfig().getInt("ignite_entityrange");
+        List<Entity> nearbyEntities = damager.getNearbyEntities(entityRange, entityRange, entityRange);
+
+        final String denyMessage = ChatColor.RED + "Je kunt geen vuur aansteken bij mobs %s.";
+
+        if (nearbyEntities.stream().anyMatch(entity -> LegacyUtil.ENEMY.contains(entity.getType()))) {
+            if (this.plugin.getEssentialsHook().getUser(damager).isGodModeEnabled()) {
+                event.setCancelled(true);
+                //noinspection deprecation
+                damager.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(String.format(denyMessage, "in god mode")));
+            } else if (damager.isFlying()) {
+                event.setCancelled(true);
+                //noinspection deprecation
+                damager.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(String.format(denyMessage, "terwijl je vliegt")));
+            }
+        }
+    }
+
+    private boolean isConfiguredCause(IgniteCause cause) {
+        List<?> configuredCauses = this.plugin.getConfig().getList("blockignite");
+        if (configuredCauses == null) {
+            return false;
+        }
+
+        for (Object configuredCause : configuredCauses) {
+            if (configuredCause instanceof IgniteCause && configuredCause == cause) {
+                return true;
             }
 
-            final int entityRange = this.plugin.getConfig().getInt("ignite_entityrange");
-            List<Entity> nearbyEntities = damager.getNearbyEntities(entityRange, entityRange, entityRange);
-
-            final String denyMessage = ChatColor.RED + "Je kunt geen vuur aansteken bij mobs %s.";
-
-            if (nearbyEntities.stream().anyMatch(entity -> LegacyUtil.ENEMY.contains(entity.getType()))) {
-                if (this.plugin.getEssentialsHook().getUser(damager).isGodModeEnabled()) {
-                    event.setCancelled(true);
-                    //noinspection deprecation
-                    damager.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(String.format(denyMessage, "in god mode")));
-                } else if (damager.isFlying()) {
-                    event.setCancelled(true);
-                    //noinspection deprecation
-                    damager.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(String.format(denyMessage, "terwijl je vliegt")));
+            if (configuredCause instanceof String) {
+                try {
+                    IgniteCause parsed = IgniteCause.valueOf(((String) configuredCause).trim().toUpperCase(Locale.ROOT));
+                    if (parsed == cause) {
+                        return true;
+                    }
+                } catch (IllegalArgumentException ignored) {
                 }
             }
         }
+
+        return false;
     }
 }

@@ -11,8 +11,6 @@ import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.block.BlockIgniteEvent.IgniteCause;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -30,11 +28,11 @@ class BlockIgniteListenerTest {
 
         TestFixtures.stubGodMode(plugin, player, false);
         when(plugin.getConfig()).thenReturn(config);
-        doReturn(List.of(IgniteCause.FIREBALL)).when(config).getList("blockignite");
+        doReturn(java.util.List.of("FIREBALL")).when(config).getList("blockignite");
         when(config.getInt("ignite_entityrange")).thenReturn(5);
         when(event.getCause()).thenReturn(IgniteCause.FIREBALL);
         when(event.getPlayer()).thenReturn(player);
-        when(player.getNearbyEntities(5, 5, 5)).thenReturn(List.of(nearbyEnemy));
+        when(player.getNearbyEntities(5, 5, 5)).thenReturn(java.util.List.of(nearbyEnemy));
 
         BlockIgniteListener listener = new BlockIgniteListener(plugin);
         listener.onBlockIgniteNearMobs(event);
