@@ -4,17 +4,16 @@ package nl.hauntedmc.fairperks;
 import nl.hauntedmc.fairperks.command.GodMacroCommand;
 import nl.hauntedmc.fairperks.listener.*;
 
-import com.github.sirblobman.combatlogx.api.ICombatLogX;
-
 import com.earth2me.essentials.Essentials;
 
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 
 public class FairPerks extends JavaPlugin {
 
     private Essentials essentialsHook;
-    private ICombatLogX combatlogHook;
+    private Plugin combatlogHook;
 
     @Override
     public void onEnable() {
@@ -29,7 +28,7 @@ public class FairPerks extends JavaPlugin {
         return essentialsHook;
     }
 
-    public ICombatLogX getCombatlogHook() {
+    public Plugin getCombatlogHook() {
         return combatlogHook;
     }
 
@@ -39,20 +38,21 @@ public class FairPerks extends JavaPlugin {
     }
 
     private void registerPluginHooks() {
-        this.essentialsHook = (Essentials) getServer().getPluginManager().getPlugin("Essentials");
+        Plugin essentialsPlugin = getServer().getPluginManager().getPlugin("Essentials");
+        this.essentialsHook = essentialsPlugin instanceof Essentials ? (Essentials) essentialsPlugin : null;
 
         if (this.essentialsHook == null) {
             getLogger().warning("Essentials is niet geinstalleerd op deze server.\n" +
                     "FairPerks schakelt zichzelf nu uit.");
             getServer().getPluginManager().disablePlugin(this);
+            return;
         }
 
-        this.combatlogHook = (ICombatLogX) getServer().getPluginManager().getPlugin("CombatLogX");
+        this.combatlogHook = getServer().getPluginManager().getPlugin("CombatLogX");
 
         if (this.combatlogHook == null) {
             getLogger().warning("CombatLogX is niet geinstalleerd op deze server.\n" +
-                    "FairPerks schakelt zichzelf nu uit.");
-            getServer().getPluginManager().disablePlugin(this);
+                    "FairPerks gaat verder zonder combat checks voor godmacro.");
         }
     }
 

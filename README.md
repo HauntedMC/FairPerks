@@ -11,17 +11,18 @@ EULA-friendly PvP safety perks for Paper servers, including controlled god-mode 
 ## Quick Start
 
 1. Place `FairPerks.jar` in your server `plugins/` directory.
-2. Install dependencies: EssentialsX and CombatLogX.
-3. Start the server once to generate `config.yml`.
-4. Enable only the features you want under `enabled`.
-5. Restart and validate behavior in-game.
+2. Install dependency: EssentialsX.
+3. Optional: install CombatLogX to enable in-combat blocking for god macro.
+4. Start the server once to generate `config.yml`.
+5. Enable only the features you want under `enabled`.
+6. Restart and validate behavior in-game.
 
 ## Requirements
 
 - Java 21
 - Paper 1.21.x
 - EssentialsX (required)
-- CombatLogX API provider (required)
+- CombatLogX (optional, enables combat-aware god macro checks)
 
 ## Build From Source
 

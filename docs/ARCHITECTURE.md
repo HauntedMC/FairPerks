@@ -6,7 +6,7 @@ FairPerks is a Paper plugin focused on controlled PvP safety behavior while resp
 
 - Keep each protection concern in a dedicated listener.
 - Minimize hidden behavior by relying on explicit config toggles.
-- Integrate cleanly with EssentialsX and CombatLogX for god-mode and combat-state decisions.
+- Integrate cleanly with EssentialsX, and optionally with CombatLogX for combat-state decisions.
 - Keep shared logic in utility helpers rather than duplicating checks across listeners.
 
 ## Core Components
@@ -15,7 +15,7 @@ FairPerks is a Paper plugin focused on controlled PvP safety behavior while resp
 - `GodMacroCommand`: enables/disables per-player god macro state.
 - Listener package: event-driven protections for anchors, beds, ignition, combat, targeting, and macro behavior.
 - Utility package:
-  - `CombatUtil`: CombatLogX combat-state adapter.
+  - `CombatUtil`: optional CombatLogX combat-state adapter (safe no-op when unavailable).
   - `InventoryUtil`: igniter item detection.
   - `SpawnerUtil`: spawner metadata read/write helpers.
   - `LegacyUtil`: hostile entity allowlist used by multiple listeners.
@@ -25,7 +25,7 @@ FairPerks is a Paper plugin focused on controlled PvP safety behavior while resp
 Startup:
 
 1. Config defaults are initialized.
-2. EssentialsX and CombatLogX hooks are resolved.
+2. EssentialsX hook is resolved; CombatLogX hook is resolved only when available.
 3. Enabled listeners and command executors are registered.
 
 Event handling:

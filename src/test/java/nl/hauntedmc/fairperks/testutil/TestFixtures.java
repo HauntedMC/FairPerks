@@ -4,8 +4,6 @@ import nl.hauntedmc.fairperks.FairPerks;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
-import com.github.sirblobman.combatlogx.api.ICombatLogX;
-import com.github.sirblobman.combatlogx.api.manager.ICombatManager;
 
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -16,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.plugin.Plugin;
 
 import java.util.Map;
 
@@ -24,6 +23,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.withSettings;
 import static org.mockito.Mockito.when;
 
 public final class TestFixtures {
@@ -51,11 +51,12 @@ public final class TestFixtures {
     }
 
     public static void stubCombatState(FairPerks plugin, Player player, boolean inCombat) {
-        ICombatLogX combatLogX = mock(ICombatLogX.class);
-        ICombatManager combatManager = mock(ICombatManager.class);
+        Plugin combatLogHook = mock(Plugin.class, withSettings().extraInterfaces(CombatLogAccessor.class));
+        CombatManagerAccessor combatManager = mock(CombatManagerAccessor.class);
 
-        when(plugin.getCombatlogHook()).thenReturn(combatLogX);
-        when(combatLogX.getCombatManager()).thenReturn(combatManager);
+        when(plugin.getCombatlogHook()).thenReturn(combatLogHook);
+        when(combatLogHook.isEnabled()).thenReturn(true);
+        when(((CombatLogAccessor) combatLogHook).getCombatManager()).thenReturn(combatManager);
         when(combatManager.isInCombat(player)).thenReturn(inCombat);
     }
 
@@ -92,5 +93,13 @@ public final class TestFixtures {
         }).when(dataContainer).set(any(NamespacedKey.class), eq(PersistentDataType.STRING), anyString());
 
         return dataContainer;
+    }
+
+    public interface CombatLogAccessor {
+        Object getCombatManager();
+    }
+
+    public interface CombatManagerAccessor {
+        boolean isInCombat(Player player);
     }
 }

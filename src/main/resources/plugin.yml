@@ -4,6 +4,8 @@ version: ${project.version}
 author: HauntedMC
 website: https://www.hauntedmc.nl
 api-version: "1.21"
+depend: [Essentials]
+softdepend: [CombatLogX]
 
 commands:
   godmacro:

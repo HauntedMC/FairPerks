@@ -46,4 +46,5 @@ This keeps incidents small and rollback simple.
 - If protections do not trigger, verify the related `enabled` toggle first.
 - If a range-based rule seems inactive, validate numeric range values and nearby hostile mobs.
 - If god macro behavior is inconsistent, validate permissions and `godmacrointerval`.
-- Ensure EssentialsX and CombatLogX are present and loaded before FairPerks.
+- Ensure EssentialsX is present and loaded before FairPerks.
+- CombatLogX is optional. If installed, god macro combat checks will be enabled automatically.

@@ -1,8 +1,8 @@
 package nl.hauntedmc.fairperks;
 
 import com.earth2me.essentials.Essentials;
-import com.github.sirblobman.combatlogx.api.ICombatLogX;
 import org.junit.jupiter.api.Test;
+import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Field;
 
@@ -26,7 +26,7 @@ class FairPerksTest {
     @Test
     void getCombatlogHookReturnsAssignedHook() throws Exception {
         FairPerks plugin = mock(FairPerks.class, withSettings().defaultAnswer(CALLS_REAL_METHODS));
-        ICombatLogX combatLogX = mock(ICombatLogX.class);
+        Plugin combatLogX = mock(Plugin.class);
 
         setPrivateField(plugin, "combatlogHook", combatLogX);
 

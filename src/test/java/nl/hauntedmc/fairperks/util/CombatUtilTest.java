@@ -1,13 +1,13 @@
 package nl.hauntedmc.fairperks.util;
 
 import nl.hauntedmc.fairperks.FairPerks;
-
-import com.github.sirblobman.combatlogx.api.ICombatLogX;
-import com.github.sirblobman.combatlogx.api.manager.ICombatManager;
+import nl.hauntedmc.fairperks.testutil.TestFixtures;
 
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -15,15 +15,33 @@ import static org.mockito.Mockito.when;
 class CombatUtilTest {
 
     @Test
-    void isInCombatReturnsCombatManagerState() {
+    void isInCombatReturnsFalseWhenCombatLogIsNotInstalled() {
         FairPerks plugin = mock(FairPerks.class);
-        ICombatLogX combatLogX = mock(ICombatLogX.class);
-        ICombatManager combatManager = mock(ICombatManager.class);
         Player player = mock(Player.class);
 
-        when(plugin.getCombatlogHook()).thenReturn(combatLogX);
-        when(combatLogX.getCombatManager()).thenReturn(combatManager);
-        when(combatManager.isInCombat(player)).thenReturn(true);
+        when(plugin.getCombatlogHook()).thenReturn(null);
+
+        assertFalse(CombatUtil.isInCombat(player, plugin));
+    }
+
+    @Test
+    void isInCombatReturnsFalseWhenCombatLogPluginIsDisabled() {
+        FairPerks plugin = mock(FairPerks.class);
+        Player player = mock(Player.class);
+        Plugin combatHook = mock(Plugin.class);
+
+        when(plugin.getCombatlogHook()).thenReturn(combatHook);
+        when(combatHook.isEnabled()).thenReturn(false);
+
+        assertFalse(CombatUtil.isInCombat(player, plugin));
+    }
+
+    @Test
+    void isInCombatReturnsCombatManagerStateWhenHookExists() {
+        FairPerks plugin = mock(FairPerks.class);
+        Player player = mock(Player.class);
+
+        TestFixtures.stubCombatState(plugin, player, true);
 
         assertTrue(CombatUtil.isInCombat(player, plugin));
     }
