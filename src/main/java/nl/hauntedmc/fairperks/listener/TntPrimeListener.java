@@ -4,28 +4,30 @@ import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.util.DamageSourceUtil;
 import nl.hauntedmc.fairperks.util.PlayerRestrictionUtil;
 
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.block.TNTPrimeEvent;
 
-public class EndCrystalInteractListener implements Listener {
+/**
+ * Prevents TNT priming by players in restricted perk states.
+ */
+public class TntPrimeListener implements Listener {
 
     private final FairPerks plugin;
 
-    public EndCrystalInteractListener(FairPerks plugin) {
+    public TntPrimeListener(FairPerks plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void crystalDamage(EntityDamageByEntityEvent event) {
-        if (event.getEntity().getType() != EntityType.END_CRYSTAL) {
+    public void onTntPrime(TNTPrimeEvent event) {
+        if (event.getPrimingEntity() == null) {
             return;
         }
 
-        Player player = DamageSourceUtil.resolvePlayerDamager(event.getDamager());
+        Player player = DamageSourceUtil.resolvePlayerDamager(event.getPrimingEntity());
         if (player == null) {
             return;
         }
@@ -34,8 +36,8 @@ public class EndCrystalInteractListener implements Listener {
                 this.plugin,
                 player,
                 event,
-                "actionbar.deny.end-crystal.god-mode",
-                "actionbar.deny.end-crystal.flying"
+                "actionbar.deny.tnt-prime.god-mode",
+                "actionbar.deny.tnt-prime.flying"
         );
     }
 }

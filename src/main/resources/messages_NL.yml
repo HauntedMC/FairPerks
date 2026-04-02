@@ -26,6 +26,15 @@ actionbar:
     mob-kill:
       god-mode: "<red>Je kunt geen mobs killen in god mode.</red>"
       flying: "<red>Je kunt geen mobs killen terwijl je vliegt.</red>"
+    perk-toggle:
+      combat: "<red>Je kunt god/fly niet inschakelen tijdens combat.</red>"
+      hostile-nearby: "<red>Je kunt god/fly niet inschakelen als er vijandige mobs in de buurt zijn.</red>"
+    pvp:
+      god-mode: "<red>Je kunt geen spelers damagen in god mode.</red>"
+      flying: "<red>Je kunt geen spelers damagen terwijl je vliegt.</red>"
     tnt-ignite:
       god-mode: "<red>Je kunt geen tnt opblazen bij mobs in god mode.</red>"
       flying: "<red>Je kunt geen tnt opblazen bij mobs terwijl je vliegt.</red>"
+    tnt-prime:
+      god-mode: "<red>Je kunt geen tnt primen in god mode.</red>"
+      flying: "<red>Je kunt geen tnt primen terwijl je vliegt.</red>"

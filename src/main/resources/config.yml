@@ -10,12 +10,16 @@ enabled:
   godmacro: true
   lava: true
   melee: true
+  perktoggleguard: true
+  pvp: true
   projectile: true
   target: true
   tntignite: true
+  tntprime: true
 ignite_entityrange: 5
 tnt_entityrange: 10
 lava_entityrange: 5
+perktoggle_entityrange: 16
 blockignite:
   - FLINT_AND_STEEL
   - FIREBALL

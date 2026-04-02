@@ -4,38 +4,41 @@ import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.util.DamageSourceUtil;
 import nl.hauntedmc.fairperks.util.PlayerRestrictionUtil;
 
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class EndCrystalInteractListener implements Listener {
+/**
+ * Blocks player-vs-player damage attempts from attackers that currently use
+ * restricted perk states (god mode / active flight).
+ */
+public class PvpDamageListener implements Listener {
 
     private final FairPerks plugin;
 
-    public EndCrystalInteractListener(FairPerks plugin) {
+    public PvpDamageListener(FairPerks plugin) {
         this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void crystalDamage(EntityDamageByEntityEvent event) {
-        if (event.getEntity().getType() != EntityType.END_CRYSTAL) {
+    public void onPvpDamage(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof Player damagedPlayer)) {
             return;
         }
 
-        Player player = DamageSourceUtil.resolvePlayerDamager(event.getDamager());
-        if (player == null) {
+        Player damager = DamageSourceUtil.resolvePlayerDamager(event.getDamager());
+        if (damager == null || damager.getUniqueId().equals(damagedPlayer.getUniqueId())) {
             return;
         }
 
         PlayerRestrictionUtil.denyWhenGodModeOrFlying(
                 this.plugin,
-                player,
+                damager,
                 event,
-                "actionbar.deny.end-crystal.god-mode",
-                "actionbar.deny.end-crystal.flying"
+                "actionbar.deny.pvp.god-mode",
+                "actionbar.deny.pvp.flying"
         );
     }
 }

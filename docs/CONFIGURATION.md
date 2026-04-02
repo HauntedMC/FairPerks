@@ -37,20 +37,24 @@ Most behavior is controlled by the `enabled` section:
 - `anchor`: respawn-anchor interaction protection.
 - `bed`: bed explosion interaction protection.
 - `blockignite`: ignition-near-mobs protection by cause list.
-- `spawnermobs`: marks eligible spawner mobs with metadata.
+- `spawnermobs`: marks eligible spawner mobs with persistent data.
 - `creeperignite`: flint/fire-charge creeper ignite protection.
 - `endcrystal`: end crystal damage protection.
 - `godmacro`: double-shift god command macro.
 - `lava`: lava bucket placement protection.
 - `melee`: melee combat restriction logic.
+- `perktoggleguard`: blocks enabling `/god` or `/fly` while in combat or near hostile mobs.
+- `pvp`: prevents damaging other players while in god mode or flying.
 - `projectile`: projectile combat restriction logic.
 - `target`: hostile targeting suppression logic.
 - `tntignite`: TNT ignite protection.
+- `tntprime`: blocks TNT priming while in god mode or flying.
 
 ## Key Numeric Settings
 
 - `ignite_entityrange`: search range for `blockignite`.
 - `lava_entityrange`: search range for `lava`.
+- `perktoggle_entityrange`: hostile-mob proximity radius used by `perktoggleguard`.
 - `tnt_entityrange`: search range for `tntignite`.
 - `godmacrointerval`: max milliseconds between two shift presses.
 

@@ -10,11 +10,20 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 
+/**
+ * Synchronizes user YAML files with bundled defaults while preserving known values.
+ */
 public final class YamlSyncUtil {
 
     private YamlSyncUtil() {
     }
 
+    /**
+     * Ensures a target YAML file exists and is rewritten with the current default key set.
+     * <p>
+     * Existing values for known keys are preserved; missing keys are backfilled from
+     * bundled defaults.
+     */
     public static void syncWithBundledDefaults(JavaPlugin plugin, String resourcePath, File targetFile) {
         ensureParentDirectory(plugin, targetFile);
         saveBundledResourceIfMissing(plugin, resourcePath, targetFile);
@@ -29,6 +38,12 @@ public final class YamlSyncUtil {
         saveYaml(plugin, targetFile, merged);
     }
 
+    /**
+     * Returns a new YAML containing only keys present in {@code defaults}.
+     * <p>
+     * This intentionally drops unknown/legacy keys so configuration files stay aligned
+     * with the plugin's supported schema.
+     */
     static YamlConfiguration mergeWithDefaults(FileConfiguration current, FileConfiguration defaults) {
         YamlConfiguration merged = new YamlConfiguration();
         for (String key : defaults.getKeys(true)) {

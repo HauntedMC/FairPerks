@@ -2,9 +2,12 @@ package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.testutil.TestFixtures;
+import nl.hauntedmc.fairperks.util.MessageService;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
@@ -23,6 +26,12 @@ import static org.mockito.Mockito.when;
 
 class GodMacroListenerTest {
 
+    private static PersistentDataContainer godMacroEnabledContainer() {
+        Map<NamespacedKey, Byte> dataMap = new HashMap<>();
+        dataMap.put(new NamespacedKey("fairperks", "godmacro"), (byte) 1);
+        return TestFixtures.mapBackedByteDataContainer(dataMap);
+    }
+
     @Test
     void onPlayerShiftToggleGodRunsGodCommandOnSecondShiftWithinInterval() {
         FairPerks plugin = mock(FairPerks.class);
@@ -32,17 +41,16 @@ class GodMacroListenerTest {
         when(player.hasPermission("essentials.god")).thenReturn(true);
         when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
         when(player.getUniqueId()).thenReturn(playerId);
+        when(player.getNearbyEntities(16, 16, 16)).thenReturn(java.util.List.of());
 
         TestFixtures.stubCombatState(plugin, player, false);
+        PersistentDataContainer dataContainer = godMacroEnabledContainer();
+        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
 
         FileConfiguration config = mock(FileConfiguration.class);
         when(plugin.getConfig()).thenReturn(config);
         when(config.getInt("godmacrointerval")).thenReturn(500);
-
-        Map<NamespacedKey, Byte> dataMap = new HashMap<>();
-        dataMap.put(new NamespacedKey("fairperks", "godmacro"), (byte) 1);
-        PersistentDataContainer dataContainer = TestFixtures.mapBackedByteDataContainer(dataMap);
-        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
+        when(config.getInt("perktoggle_entityrange")).thenReturn(16);
 
         PlayerToggleSneakEvent event = mock(PlayerToggleSneakEvent.class);
         when(event.getPlayer()).thenReturn(player);
@@ -56,23 +64,99 @@ class GodMacroListenerTest {
     }
 
     @Test
-    void onPlayerShiftToggleGodSkipsMacroWhenPlayerIsInCombat() {
+    void onPlayerShiftToggleGodBlocksEnablingMacroWhenPlayerIsInCombat() {
         FairPerks plugin = mock(FairPerks.class);
 
         Player player = mock(Player.class);
-        when(player.getUniqueId()).thenReturn(UUID.randomUUID());
+        UUID playerId = UUID.randomUUID();
+        when(player.getUniqueId()).thenReturn(playerId);
         when(player.hasPermission("essentials.god")).thenReturn(true);
         when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
 
         TestFixtures.stubCombatState(plugin, player, true);
+        MessageService messageService = TestFixtures.stubMessageService(plugin);
+        PersistentDataContainer dataContainer = godMacroEnabledContainer();
+        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
 
-        PlayerToggleSneakEvent event = mock(PlayerToggleSneakEvent.class);
-        when(event.getPlayer()).thenReturn(player);
+        FileConfiguration config = mock(FileConfiguration.class);
+        when(plugin.getConfig()).thenReturn(config);
+        when(config.getInt("godmacrointerval")).thenReturn(500);
+        when(config.getInt("perktoggle_entityrange")).thenReturn(16);
+
+        PlayerToggleSneakEvent sneakEvent = mock(PlayerToggleSneakEvent.class);
+        when(sneakEvent.getPlayer()).thenReturn(player);
+        when(sneakEvent.isSneaking()).thenReturn(true);
 
         GodMacroListener listener = new GodMacroListener(plugin);
-        listener.onPlayerShiftToggleGod(event);
+        listener.onPlayerShiftToggleGod(sneakEvent);
+        listener.onPlayerShiftToggleGod(sneakEvent);
 
         verify(player, never()).performCommand("god");
+        verify(messageService).sendActionBar(player, "actionbar.deny.perk-toggle.combat");
+    }
+
+    @Test
+    void onPlayerShiftToggleGodBlocksEnablingMacroWhenHostilesAreNearby() {
+        FairPerks plugin = mock(FairPerks.class);
+
+        Player player = mock(Player.class);
+        UUID playerId = UUID.randomUUID();
+        Entity hostile = TestFixtures.mockEntityOfType(EntityType.CREEPER);
+        when(player.getUniqueId()).thenReturn(playerId);
+        when(player.hasPermission("essentials.god")).thenReturn(true);
+        when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
+        when(player.getNearbyEntities(16, 16, 16)).thenReturn(java.util.List.of(hostile));
+
+        TestFixtures.stubCombatState(plugin, player, false);
+        MessageService messageService = TestFixtures.stubMessageService(plugin);
+        PersistentDataContainer dataContainer = godMacroEnabledContainer();
+        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
+
+        FileConfiguration config = mock(FileConfiguration.class);
+        when(plugin.getConfig()).thenReturn(config);
+        when(config.getInt("godmacrointerval")).thenReturn(500);
+        when(config.getInt("perktoggle_entityrange")).thenReturn(16);
+
+        PlayerToggleSneakEvent sneakEvent = mock(PlayerToggleSneakEvent.class);
+        when(sneakEvent.getPlayer()).thenReturn(player);
+        when(sneakEvent.isSneaking()).thenReturn(true);
+
+        GodMacroListener listener = new GodMacroListener(plugin);
+        listener.onPlayerShiftToggleGod(sneakEvent);
+        listener.onPlayerShiftToggleGod(sneakEvent);
+
+        verify(player, never()).performCommand("god");
+        verify(messageService).sendActionBar(player, "actionbar.deny.perk-toggle.hostile-nearby");
+    }
+
+    @Test
+    void onPlayerShiftToggleGodAllowsDisablingMacroInCombat() {
+        FairPerks plugin = mock(FairPerks.class);
+
+        Player player = mock(Player.class);
+        UUID playerId = UUID.randomUUID();
+        when(player.getUniqueId()).thenReturn(playerId);
+        when(player.hasPermission("essentials.god")).thenReturn(true);
+        when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
+
+        TestFixtures.stubGodMode(plugin, player, true);
+        TestFixtures.stubCombatState(plugin, player, true);
+        PersistentDataContainer dataContainer = godMacroEnabledContainer();
+        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
+
+        FileConfiguration config = mock(FileConfiguration.class);
+        when(plugin.getConfig()).thenReturn(config);
+        when(config.getInt("godmacrointerval")).thenReturn(500);
+
+        PlayerToggleSneakEvent sneakEvent = mock(PlayerToggleSneakEvent.class);
+        when(sneakEvent.getPlayer()).thenReturn(player);
+        when(sneakEvent.isSneaking()).thenReturn(true);
+
+        GodMacroListener listener = new GodMacroListener(plugin);
+        listener.onPlayerShiftToggleGod(sneakEvent);
+        listener.onPlayerShiftToggleGod(sneakEvent);
+
+        verify(player, times(1)).performCommand("god");
     }
 
     @Test
@@ -84,17 +168,16 @@ class GodMacroListenerTest {
         when(player.getUniqueId()).thenReturn(playerId);
         when(player.hasPermission("essentials.god")).thenReturn(true);
         when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
+        when(player.getNearbyEntities(16, 16, 16)).thenReturn(java.util.List.of());
 
         TestFixtures.stubCombatState(plugin, player, false);
+        PersistentDataContainer dataContainer = godMacroEnabledContainer();
+        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
 
         FileConfiguration config = mock(FileConfiguration.class);
         when(plugin.getConfig()).thenReturn(config);
         when(config.getInt("godmacrointerval")).thenReturn(500);
-
-        Map<NamespacedKey, Byte> dataMap = new HashMap<>();
-        dataMap.put(new NamespacedKey("fairperks", "godmacro"), (byte) 1);
-        PersistentDataContainer dataContainer = TestFixtures.mapBackedByteDataContainer(dataMap);
-        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
+        when(config.getInt("perktoggle_entityrange")).thenReturn(16);
 
         PlayerToggleSneakEvent sneakEvent = mock(PlayerToggleSneakEvent.class);
         when(sneakEvent.getPlayer()).thenReturn(player);

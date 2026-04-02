@@ -6,6 +6,12 @@ import java.util.Collections;
 import java.util.EnumSet;
 import java.util.Set;
 
+/**
+ * Central hostile-entity catalogue shared across listeners.
+ * <p>
+ * Keeping this list in one place ensures all restrictions use the same definition
+ * of "enemy", including server-specific entity types available on this runtime.
+ */
 public final class LegacyUtil {
 
     public static final Set<EntityType> ENEMY = Collections.unmodifiableSet(EnumSet.of(
@@ -58,6 +64,9 @@ public final class LegacyUtil {
     private LegacyUtil() {
     }
 
+    /**
+     * Returns whether the provided entity type is considered hostile for FairPerks.
+     */
     public static boolean isEnemy(EntityType entityType) {
         return ENEMY.contains(entityType);
     }

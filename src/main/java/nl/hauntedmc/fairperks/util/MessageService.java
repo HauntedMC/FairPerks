@@ -15,6 +15,11 @@ import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
 
+/**
+ * Loads localized message templates and resolves runtime components.
+ * <p>
+ * Resolution order is active language file first, then bundled defaults.
+ */
 public class MessageService {
 
     private static final String DEFAULT_MESSAGES_FILE = "messages.yml";
@@ -63,6 +68,9 @@ public class MessageService {
         return miniMessage.deserialize(template, resolvers);
     }
 
+    /**
+     * Looks up a message key with fallback to defaults and one-time missing-key logging.
+     */
     private String resolveTemplate(String key) {
         String activeTemplate = activeMessages != null ? activeMessages.getString(key) : null;
         if (activeTemplate != null) {

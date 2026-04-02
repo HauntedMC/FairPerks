@@ -2,6 +2,8 @@ package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.util.GodMacroState;
+import nl.hauntedmc.fairperks.util.PerkToggleGuardUtil;
+import nl.hauntedmc.fairperks.util.PlayerRestrictionUtil;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,8 +15,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import static nl.hauntedmc.fairperks.util.CombatUtil.isInCombat;
-
+/**
+ * Handles the optional god-macro behavior:
+ * crouch twice within a short interval to run "/god".
+ * <p>
+ * When macro-triggered toggles would enable god mode, the same perk guard policy is
+ * applied as direct /god and /fly commands. Disabling remains always allowed.
+ */
 public class GodMacroListener implements Listener {
 
     private final FairPerks plugin;
@@ -28,6 +35,7 @@ public class GodMacroListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerShiftToggleGod(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
+        // Trigger only on the "press" transition of sneaking.
         if (!event.isSneaking()) {
             return;
         }
@@ -36,7 +44,7 @@ public class GodMacroListener implements Listener {
             return;
         }
 
-        if (isInCombat(player, this.plugin) || !GodMacroState.isEnabled(player)) {
+        if (!GodMacroState.isEnabled(player)) {
             return;
         }
 
@@ -46,6 +54,13 @@ public class GodMacroListener implements Listener {
 
         int godMacroInterval = this.plugin.getConfig().getInt("godmacrointerval");
         if (lastShiftTime != null && currentTime - lastShiftTime < godMacroInterval) {
+            // Guard only when this macro toggle would turn god mode on.
+            if (!PlayerRestrictionUtil.isInGodMode(player, this.plugin)
+                    && !PerkToggleGuardUtil.canEnablePerk(player, this.plugin)) {
+                shiftTimestamps.remove(playerId);
+                return;
+            }
+
             player.performCommand("god");
             shiftTimestamps.remove(playerId);
             return;
@@ -56,6 +71,7 @@ public class GodMacroListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
+        // Avoid stale timestamps for players that reconnect later.
         shiftTimestamps.remove(event.getPlayer().getUniqueId());
     }
 }

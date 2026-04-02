@@ -10,9 +10,12 @@ import nl.hauntedmc.fairperks.listener.EndCrystalInteractListener;
 import nl.hauntedmc.fairperks.listener.GodMacroListener;
 import nl.hauntedmc.fairperks.listener.LavaPlaceListener;
 import nl.hauntedmc.fairperks.listener.MeleeListener;
+import nl.hauntedmc.fairperks.listener.PerkToggleGuardListener;
 import nl.hauntedmc.fairperks.listener.ProjectileListener;
+import nl.hauntedmc.fairperks.listener.PvpDamageListener;
 import nl.hauntedmc.fairperks.listener.TargetListener;
 import nl.hauntedmc.fairperks.listener.TntIgniteListener;
+import nl.hauntedmc.fairperks.listener.TntPrimeListener;
 import nl.hauntedmc.fairperks.util.MessageService;
 import nl.hauntedmc.fairperks.util.YamlSyncUtil;
 
@@ -100,9 +103,12 @@ public class FairPerks extends JavaPlugin {
         registerListenerIfEnabled("enabled.godmacro", new GodMacroListener(this));
         registerListenerIfEnabled("enabled.lava", new LavaPlaceListener(this));
         registerListenerIfEnabled("enabled.melee", new MeleeListener(this));
+        registerListenerIfEnabled("enabled.perktoggleguard", new PerkToggleGuardListener(this));
+        registerListenerIfEnabled("enabled.pvp", new PvpDamageListener(this));
         registerListenerIfEnabled("enabled.projectile", new ProjectileListener(this));
         registerListenerIfEnabled("enabled.target", new TargetListener(this));
         registerListenerIfEnabled("enabled.tntignite", new TntIgniteListener(this));
+        registerListenerIfEnabled("enabled.tntprime", new TntPrimeListener(this));
     }
 
     private void registerCommands() {

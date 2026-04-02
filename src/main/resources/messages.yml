@@ -26,6 +26,15 @@ actionbar:
     mob-kill:
       god-mode: "<red>You cannot kill hostile mobs while in god mode.</red>"
       flying: "<red>You cannot kill hostile mobs while flying.</red>"
+    perk-toggle:
+      combat: "<red>You cannot enable god/fly while in combat.</red>"
+      hostile-nearby: "<red>You cannot enable god/fly while hostile mobs are nearby.</red>"
+    pvp:
+      god-mode: "<red>You cannot damage players while in god mode.</red>"
+      flying: "<red>You cannot damage players while flying.</red>"
     tnt-ignite:
       god-mode: "<red>You cannot ignite TNT near hostile mobs while in god mode.</red>"
       flying: "<red>You cannot ignite TNT near hostile mobs while flying.</red>"
+    tnt-prime:
+      god-mode: "<red>You cannot prime TNT while in god mode.</red>"
+      flying: "<red>You cannot prime TNT while flying.</red>"
