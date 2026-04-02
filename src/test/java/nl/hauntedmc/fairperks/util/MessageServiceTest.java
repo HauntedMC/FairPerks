@@ -29,8 +29,8 @@ class MessageServiceTest {
                 "command:\n  godmacro:\n    enabled: \"<yellow>enabled default</yellow>\"\n"
         );
         writeFile(
-                tempDir.resolve("messages_NL.yml"),
-                "command:\n  godmacro:\n    enabled: \"<yellow>ingeschakeld nl</yellow>\"\n"
+                tempDir.resolve("messages_FR.yml"),
+                "command:\n  godmacro:\n    enabled: \"<yellow>active fr</yellow>\"\n"
         );
 
         FairPerks plugin = mock(FairPerks.class);
@@ -40,7 +40,7 @@ class MessageServiceTest {
         when(plugin.getDataFolder()).thenReturn(tempDir.toFile());
         when(plugin.getConfig()).thenReturn(config);
         when(plugin.getLogger()).thenReturn(logger);
-        when(config.getString("language", "default")).thenReturn("NL");
+        when(config.getString("language", "default")).thenReturn("FR");
 
         MessageService messageService = new MessageService(plugin);
         messageService.load();
@@ -49,7 +49,7 @@ class MessageServiceTest {
                 messageService.component("command.godmacro.enabled")
         );
 
-        assertEquals("ingeschakeld nl", message);
+        assertEquals("active fr", message);
     }
 
     @Test
@@ -67,6 +67,36 @@ class MessageServiceTest {
         when(plugin.getConfig()).thenReturn(config);
         when(plugin.getLogger()).thenReturn(logger);
         when(config.getString("language", "default")).thenReturn("DE");
+
+        MessageService messageService = new MessageService(plugin);
+        messageService.load();
+
+        String message = PlainTextComponentSerializer.plainText().serialize(
+                messageService.component("command.godmacro.enabled")
+        );
+
+        assertEquals("enabled default", message);
+    }
+
+    @Test
+    void componentFallsBackToDefaultKeyWhenActiveLanguageMissesIt() throws IOException {
+        writeFile(
+                tempDir.resolve("messages.yml"),
+                "command:\n  godmacro:\n    enabled: \"<yellow>enabled default</yellow>\"\n"
+        );
+        writeFile(
+                tempDir.resolve("messages_FR.yml"),
+                "command:\n  godmacro:\n    disabled: \"<yellow>disabled fr</yellow>\"\n"
+        );
+
+        FairPerks plugin = mock(FairPerks.class);
+        FileConfiguration config = mock(FileConfiguration.class);
+        Logger logger = Logger.getLogger("MessageServiceTest");
+
+        when(plugin.getDataFolder()).thenReturn(tempDir.toFile());
+        when(plugin.getConfig()).thenReturn(config);
+        when(plugin.getLogger()).thenReturn(logger);
+        when(config.getString("language", "default")).thenReturn("FR");
 
         MessageService messageService = new MessageService(plugin);
         messageService.load();

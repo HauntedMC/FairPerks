@@ -10,6 +10,16 @@ FairPerks uses one main runtime file:
 - `plugins/FairPerks/messages.yml` (default English messages)
 - `plugins/FairPerks/messages_NL.yml` (Dutch translation)
 
+## Automatic File Synchronization
+
+On startup, FairPerks synchronizes `config.yml` and `messages.yml` with the bundled defaults:
+
+- missing keys are added
+- keys that no longer exist in the bundled defaults are removed
+- existing values for known keys are preserved
+
+This keeps server files current across plugin updates while retaining your configured values.
+
 ## Language Selection
 
 Set `language` in `config.yml`:

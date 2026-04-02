@@ -4,12 +4,15 @@ package nl.hauntedmc.fairperks;
 import nl.hauntedmc.fairperks.command.GodMacroCommand;
 import nl.hauntedmc.fairperks.listener.*;
 import nl.hauntedmc.fairperks.util.MessageService;
+import nl.hauntedmc.fairperks.util.YamlSyncUtil;
 
 import com.earth2me.essentials.Essentials;
 
 import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.io.File;
 
 
 public class FairPerks extends JavaPlugin {
@@ -20,7 +23,7 @@ public class FairPerks extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.getLogger().info("FairPerks wordt geladen.");
+        this.getLogger().info("FairPerks is starting.");
         initializeConfig();
         initializeMessageService();
         registerPluginHooks();
@@ -44,8 +47,13 @@ public class FairPerks extends JavaPlugin {
     }
 
     private void initializeConfig() {
-        getConfig().options().copyDefaults(true);
-        saveDefaultConfig();
+        File dataFolder = getDataFolder();
+        if (!dataFolder.exists() && !dataFolder.mkdirs()) {
+            getLogger().warning("Could not create plugin data folder: " + dataFolder.getAbsolutePath());
+        }
+
+        YamlSyncUtil.syncWithBundledDefaults(this, "config.yml", new File(dataFolder, "config.yml"));
+        reloadConfig();
     }
 
     private void initializeMessageService() {
@@ -58,8 +66,8 @@ public class FairPerks extends JavaPlugin {
         this.essentialsHook = essentialsPlugin instanceof Essentials ? (Essentials) essentialsPlugin : null;
 
         if (this.essentialsHook == null) {
-            getLogger().warning("Essentials is niet geinstalleerd op deze server.\n" +
-                    "FairPerks schakelt zichzelf nu uit.");
+            getLogger().warning("Essentials is not installed on this server.\n" +
+                    "FairPerks will now disable itself.");
             getServer().getPluginManager().disablePlugin(this);
             return;
         }
@@ -67,8 +75,8 @@ public class FairPerks extends JavaPlugin {
         this.combatlogHook = getServer().getPluginManager().getPlugin("CombatLogX");
 
         if (this.combatlogHook == null) {
-            getLogger().warning("CombatLogX is niet geinstalleerd op deze server.\n" +
-                    "FairPerks gaat verder zonder combat checks voor godmacro.");
+            getLogger().warning("CombatLogX is not installed on this server.\n" +
+                    "FairPerks will continue without combat checks for godmacro.");
         }
     }
 
@@ -115,7 +123,7 @@ public class FairPerks extends JavaPlugin {
         if (this.getConfig().getBoolean("enabled.godmacro")) {
             PluginCommand godMacroCommand = this.getCommand("godmacro");
             if (godMacroCommand == null) {
-                getLogger().warning("Commando 'godmacro' ontbreekt in plugin.yml; godmacro wordt niet geregistreerd.");
+                getLogger().warning("Command 'godmacro' is missing in plugin.yml; godmacro will not be registered.");
                 return;
             }
             godMacroCommand.setExecutor(new GodMacroCommand(this));

@@ -40,7 +40,7 @@ public class CombatUtil {
 
         loggedCombatHookFailure = true;
         plugin.getLogger().warning(
-                "CombatLogX hook kon niet worden gebruikt; FairPerks gaat verder zonder combat checks. Oorzaak: "
+                "CombatLogX hook could not be used; FairPerks will continue without combat checks. Cause: "
                         + exception.getClass().getSimpleName()
         );
     }

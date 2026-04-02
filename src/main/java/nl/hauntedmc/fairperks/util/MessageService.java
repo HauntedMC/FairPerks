@@ -18,7 +18,6 @@ import java.util.Set;
 public class MessageService {
 
     private static final String DEFAULT_MESSAGES_FILE = "messages.yml";
-    private static final String BUILTIN_DUTCH_MESSAGES_FILE = "messages_NL.yml";
 
     private final FairPerks plugin;
     private final MiniMessage miniMessage;
@@ -36,12 +35,10 @@ public class MessageService {
     public void load() {
         File dataFolder = plugin.getDataFolder();
         if (!dataFolder.exists() && !dataFolder.mkdirs()) {
-            plugin.getLogger().warning("Kon plugin data map niet aanmaken: " + dataFolder.getAbsolutePath());
+            plugin.getLogger().warning("Could not create plugin data folder: " + dataFolder.getAbsolutePath());
         }
 
-        saveBundledResourceIfMissing(DEFAULT_MESSAGES_FILE);
-        saveBundledResourceIfMissing(BUILTIN_DUTCH_MESSAGES_FILE);
-
+        YamlSyncUtil.syncWithBundledDefaults(plugin, DEFAULT_MESSAGES_FILE, new File(dataFolder, DEFAULT_MESSAGES_FILE));
         this.defaultMessages = loadMessagesFile(DEFAULT_MESSAGES_FILE);
 
         String configuredLanguage = plugin.getConfig().getString("language", "default");
@@ -49,7 +46,7 @@ public class MessageService {
         this.activeMessages = loadMessagesFile(activeFileName);
 
         if (!DEFAULT_MESSAGES_FILE.equals(activeFileName)) {
-            plugin.getLogger().info("Berichtentaal geladen uit " + activeFileName + ".");
+            plugin.getLogger().info("Loaded message language from " + activeFileName + ".");
         }
     }
 
@@ -78,7 +75,7 @@ public class MessageService {
         }
 
         if (missingKeysLogged.add(key)) {
-            plugin.getLogger().warning("Ontbrekende message key: " + key);
+            plugin.getLogger().warning("Missing message key: " + key);
         }
         return "<red>Missing message key: " + key + "</red>";
     }
@@ -94,12 +91,13 @@ public class MessageService {
         }
 
         String candidate = "messages_" + normalizedLanguage.toUpperCase(Locale.ROOT) + ".yml";
+        syncBundledLanguageFile(candidate);
         File candidateFile = new File(plugin.getDataFolder(), candidate);
         if (candidateFile.exists()) {
             return candidate;
         }
 
-        plugin.getLogger().warning("Taalbestand " + candidate + " niet gevonden, fallback naar " + DEFAULT_MESSAGES_FILE + ".");
+        plugin.getLogger().warning("Language file " + candidate + " not found; falling back to " + DEFAULT_MESSAGES_FILE + ".");
         return DEFAULT_MESSAGES_FILE;
     }
 
@@ -107,16 +105,7 @@ public class MessageService {
         return YamlConfiguration.loadConfiguration(new File(plugin.getDataFolder(), fileName));
     }
 
-    private void saveBundledResourceIfMissing(String resourcePath) {
-        File target = new File(plugin.getDataFolder(), resourcePath);
-        if (target.exists()) {
-            return;
-        }
-
-        if (plugin.getResource(resourcePath) == null) {
-            return;
-        }
-
-        plugin.saveResource(resourcePath, false);
+    private void syncBundledLanguageFile(String resourcePath) {
+        YamlSyncUtil.syncWithBundledDefaults(plugin, resourcePath, new File(plugin.getDataFolder(), resourcePath));
     }
 }
