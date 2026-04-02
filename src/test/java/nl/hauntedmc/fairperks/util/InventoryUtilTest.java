@@ -2,6 +2,7 @@ package nl.hauntedmc.fairperks.util;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.junit.jupiter.api.Test;
@@ -43,5 +44,22 @@ class InventoryUtilTest {
         when(offHand.getType()).thenReturn(Material.AIR);
 
         assertFalse(InventoryUtil.holdsIgniter(player));
+    }
+
+    @Test
+    void holdsIgniterForHandOnlyChecksSpecifiedHand() {
+        Player player = mock(Player.class);
+        PlayerInventory inventory = mock(PlayerInventory.class);
+        ItemStack mainHand = mock(ItemStack.class);
+        ItemStack offHand = mock(ItemStack.class);
+
+        when(player.getInventory()).thenReturn(inventory);
+        when(inventory.getItemInMainHand()).thenReturn(mainHand);
+        when(inventory.getItemInOffHand()).thenReturn(offHand);
+        when(mainHand.getType()).thenReturn(Material.AIR);
+        when(offHand.getType()).thenReturn(Material.FIRE_CHARGE);
+
+        assertFalse(InventoryUtil.holdsIgniter(player, EquipmentSlot.HAND));
+        assertTrue(InventoryUtil.holdsIgniter(player, EquipmentSlot.OFF_HAND));
     }
 }

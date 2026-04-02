@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
@@ -26,6 +27,7 @@ class CreeperIgniteListenerTest {
         TestFixtures.stubGodMode(plugin, player, false);
         TestFixtures.stubMainHandMaterial(player, Material.FLINT_AND_STEEL);
         when(event.getPlayer()).thenReturn(player);
+        when(event.getHand()).thenReturn(EquipmentSlot.HAND);
         when(event.getRightClicked()).thenReturn(creeper);
         when(creeper.getType()).thenReturn(EntityType.CREEPER);
 

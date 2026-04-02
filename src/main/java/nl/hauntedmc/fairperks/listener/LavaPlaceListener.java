@@ -2,10 +2,10 @@ package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.util.LegacyUtil;
+import nl.hauntedmc.fairperks.util.PlayerRestrictionUtil;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -20,24 +20,24 @@ public class LavaPlaceListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onLavaBucketInteract(PlayerBucketEmptyEvent event) {
-        if (event.getBucket() == Material.LAVA_BUCKET) {
-            Player player = event.getPlayer();
-
-            final int entityRange = this.plugin.getConfig().getInt("lava_entityrange");
-            List<Entity> nearbyEntities = player.getNearbyEntities(entityRange, entityRange, entityRange);
-
-            if (nearbyEntities.stream().anyMatch(entity -> LegacyUtil.ENEMY.contains(entity.getType()))) {
-                if (this.plugin.getEssentialsHook().getUser(player).isGodModeEnabled()) {
-                    event.setCancelled(true);
-                    this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.lava.god-mode");
-                } else if (player.isFlying()) {
-                    event.setCancelled(true);
-                    this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.lava.flying");
-                }
-            }
+        if (event.getBucket() != Material.LAVA_BUCKET) {
+            return;
         }
-    }
 
+        int entityRange = this.plugin.getConfig().getInt("lava_entityrange");
+        List<Entity> nearbyEntities = event.getPlayer().getNearbyEntities(entityRange, entityRange, entityRange);
+        if (nearbyEntities.stream().noneMatch(entity -> LegacyUtil.isEnemy(entity.getType()))) {
+            return;
+        }
+
+        PlayerRestrictionUtil.denyWhenGodModeOrFlying(
+                this.plugin,
+                event.getPlayer(),
+                event,
+                "actionbar.deny.lava.god-mode",
+                "actionbar.deny.lava.flying"
+        );
+    }
 }

@@ -1,52 +1,55 @@
 package nl.hauntedmc.fairperks.util;
 
-import nl.hauntedmc.fairperks.FairPerks;
+import nl.hauntedmc.fairperks.testutil.TestFixtures;
 
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
-import org.bukkit.metadata.MetadataValue;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 class SpawnerUtilTest {
 
     @Test
-    void isSpawnermobReturnsTrueWhenAnyMetadataEntryIsTrue() {
+    void isSpawnermobReturnsTrueWhenMarkerIsPresent() {
         Entity entity = mock(Entity.class);
-        MetadataValue falseValue = mock(MetadataValue.class);
-        MetadataValue trueValue = mock(MetadataValue.class);
+        Map<NamespacedKey, Byte> entityData = new HashMap<>();
+        PersistentDataContainer dataContainer = TestFixtures.mapBackedByteDataContainer(entityData);
 
-        when(falseValue.asBoolean()).thenReturn(false);
-        when(trueValue.asBoolean()).thenReturn(true);
-        when(entity.getMetadata("spawnermob")).thenReturn(List.of(falseValue, trueValue));
+        entityData.put(new NamespacedKey("fairperks", "spawnermob"), (byte) 1);
+        when(entity.getPersistentDataContainer()).thenReturn(dataContainer);
 
         assertTrue(SpawnerUtil.isSpawnermob(entity));
     }
 
     @Test
-    void setSpawnermobWritesMetadataToEntity() {
+    void setSpawnermobWritesMarkerToPersistentDataContainer() {
         Entity entity = mock(Entity.class);
-        MetadataValue metadataValue = mock(MetadataValue.class);
+        Map<NamespacedKey, Byte> entityData = new HashMap<>();
+        PersistentDataContainer dataContainer = TestFixtures.mapBackedByteDataContainer(entityData);
 
-        SpawnerUtil.setSpawnermob(entity, metadataValue);
+        when(entity.getPersistentDataContainer()).thenReturn(dataContainer);
 
-        verify(entity).setMetadata(eq("spawnermob"), eq(metadataValue));
+        SpawnerUtil.setSpawnermob(entity);
+
+        assertEquals(Byte.valueOf((byte) 1), entityData.get(new NamespacedKey("fairperks", "spawnermob")));
     }
 
     @Test
-    void createCustomMetadataValueReturnsPluginScopedTrueMetadata() {
-        FairPerks plugin = mock(FairPerks.class);
+    void isSpawnermobReturnsFalseWhenMarkerIsMissing() {
+        Entity entity = mock(Entity.class);
+        PersistentDataContainer dataContainer = TestFixtures.mapBackedByteDataContainer(new HashMap<>());
 
-        MetadataValue metadataValue = SpawnerUtil.createCustomMetadataValue(plugin);
+        when(entity.getPersistentDataContainer()).thenReturn(dataContainer);
 
-        assertTrue(metadataValue.asBoolean());
-        assertSame(plugin, metadataValue.getOwningPlugin());
+        assertFalse(SpawnerUtil.isSpawnermob(entity));
     }
 }

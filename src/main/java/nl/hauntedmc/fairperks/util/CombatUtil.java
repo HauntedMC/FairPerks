@@ -7,9 +7,12 @@ import org.bukkit.plugin.Plugin;
 
 import java.lang.reflect.Method;
 
-public class CombatUtil {
+public final class CombatUtil {
 
     private static boolean loggedCombatHookFailure;
+
+    private CombatUtil() {
+    }
 
     public static boolean isInCombat(Player player, FairPerks plugin) {
         Plugin combatlogHook = plugin.getCombatlogHook();

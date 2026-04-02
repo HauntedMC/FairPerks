@@ -2,8 +2,10 @@ package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.util.LegacyUtil;
+import nl.hauntedmc.fairperks.util.PlayerRestrictionUtil;
 
-import org.bukkit.entity.*;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
@@ -18,21 +20,18 @@ public class TargetListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onEntityTarget(EntityTargetLivingEntityEvent event) {
-        Player player;
-
-        if (event.getTarget() instanceof Player) {
-            player = (Player) event.getTarget();
-        } else {
+        if (!(event.getTarget() instanceof Player player)) {
             return;
         }
 
         Entity entity = event.getEntity();
+        if (!LegacyUtil.isEnemy(entity.getType())) {
+            return;
+        }
 
-        if (LegacyUtil.ENEMY.contains(entity.getType())) {
-            if (this.plugin.getEssentialsHook().getUser(player).isGodModeEnabled() || player.isFlying()) {
-                event.setTarget(null);
-                event.setCancelled(true);
-            }
+        if (PlayerRestrictionUtil.isGodModeOrFlying(player, this.plugin)) {
+            event.setTarget(null);
+            event.setCancelled(true);
         }
     }
 }

@@ -1,23 +1,24 @@
 package nl.hauntedmc.fairperks.util;
 
-import nl.hauntedmc.fairperks.FairPerks;
-
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Entity;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
+import org.bukkit.persistence.PersistentDataType;
 
-public class SpawnerUtil {
+public final class SpawnerUtil {
+
+    private static final NamespacedKey SPAWNER_MOB_KEY = new NamespacedKey("fairperks", "spawnermob");
+    private static final byte MARKER_TRUE = 1;
+
+    private SpawnerUtil() {
+    }
 
     public static boolean isSpawnermob(Entity damagedEntity) {
-        return damagedEntity.getMetadata("spawnermob").stream().anyMatch(MetadataValue::asBoolean);
+        Byte value = damagedEntity.getPersistentDataContainer().get(SPAWNER_MOB_KEY, PersistentDataType.BYTE);
+        return value != null && value == MARKER_TRUE;
     }
 
-    public static void setSpawnermob(Entity spawnerMob, MetadataValue metadataValue) {
-        spawnerMob.setMetadata("spawnermob", metadataValue);
-    }
-
-    public static MetadataValue createCustomMetadataValue(FairPerks plugin) {
-        return new FixedMetadataValue(plugin, true);
+    public static void setSpawnermob(Entity spawnerMob) {
+        spawnerMob.getPersistentDataContainer().set(SPAWNER_MOB_KEY, PersistentDataType.BYTE, MARKER_TRUE);
     }
 
 }

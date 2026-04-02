@@ -9,6 +9,7 @@ import org.bukkit.block.data.type.Bed;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.junit.jupiter.api.Test;
 
 import static org.mockito.Mockito.mock;
@@ -29,6 +30,7 @@ class BedInteractListenerTest {
         PlayerInteractEvent event = mock(PlayerInteractEvent.class);
 
         when(event.getAction()).thenReturn(Action.RIGHT_CLICK_BLOCK);
+        when(event.getHand()).thenReturn(EquipmentSlot.HAND);
         when(event.getClickedBlock()).thenReturn(clickedBlock);
         when(event.getPlayer()).thenReturn(player);
         when(clickedBlock.getBlockData()).thenReturn(bedData);

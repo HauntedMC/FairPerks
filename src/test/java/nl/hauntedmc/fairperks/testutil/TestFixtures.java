@@ -20,7 +20,6 @@ import org.bukkit.plugin.Plugin;
 import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.mock;
@@ -83,19 +82,17 @@ public final class TestFixtures {
         return entity;
     }
 
-    public static PersistentDataContainer mapBackedStringDataContainer(Map<NamespacedKey, String> map) {
+    public static PersistentDataContainer mapBackedByteDataContainer(Map<NamespacedKey, Byte> map) {
         PersistentDataContainer dataContainer = mock(PersistentDataContainer.class);
 
-        when(dataContainer.has(any(NamespacedKey.class), eq(PersistentDataType.STRING)))
-                .thenAnswer(invocation -> map.containsKey(invocation.getArgument(0)));
-        when(dataContainer.get(any(NamespacedKey.class), eq(PersistentDataType.STRING)))
+        when(dataContainer.get(any(NamespacedKey.class), eq(PersistentDataType.BYTE)))
                 .thenAnswer(invocation -> map.get(invocation.getArgument(0)));
         doAnswer(invocation -> {
             NamespacedKey key = invocation.getArgument(0);
-            String value = invocation.getArgument(2);
+            Byte value = invocation.getArgument(2);
             map.put(key, value);
             return null;
-        }).when(dataContainer).set(any(NamespacedKey.class), eq(PersistentDataType.STRING), anyString());
+        }).when(dataContainer).set(any(NamespacedKey.class), eq(PersistentDataType.BYTE), any(Byte.class));
 
         return dataContainer;
     }

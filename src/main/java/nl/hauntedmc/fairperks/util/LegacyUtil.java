@@ -2,11 +2,13 @@ package nl.hauntedmc.fairperks.util;
 
 import org.bukkit.entity.EntityType;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Collections;
+import java.util.EnumSet;
+import java.util.Set;
 
-public class LegacyUtil {
-    public final static List<EntityType> ENEMY = Arrays.asList(
+public final class LegacyUtil {
+
+    public static final Set<EntityType> ENEMY = Collections.unmodifiableSet(EnumSet.of(
             EntityType.BLAZE,
             EntityType.BOGGED,
             EntityType.BREEZE,
@@ -50,5 +52,13 @@ public class LegacyUtil {
             EntityType.ZOMBIE,
             EntityType.ZOMBIE_NAUTILUS,
             EntityType.ZOMBIE_VILLAGER,
-            EntityType.ZOMBIFIED_PIGLIN);
+            EntityType.ZOMBIFIED_PIGLIN
+    ));
+
+    private LegacyUtil() {
+    }
+
+    public static boolean isEnemy(EntityType entityType) {
+        return ENEMY.contains(entityType);
+    }
 }

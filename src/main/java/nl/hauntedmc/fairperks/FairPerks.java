@@ -1,19 +1,29 @@
 package nl.hauntedmc.fairperks;
 
-
 import nl.hauntedmc.fairperks.command.GodMacroCommand;
-import nl.hauntedmc.fairperks.listener.*;
+import nl.hauntedmc.fairperks.listener.AnchorInteractListener;
+import nl.hauntedmc.fairperks.listener.BedInteractListener;
+import nl.hauntedmc.fairperks.listener.BlockIgniteListener;
+import nl.hauntedmc.fairperks.listener.CreeperIgniteListener;
+import nl.hauntedmc.fairperks.listener.CreatureSpawnListener;
+import nl.hauntedmc.fairperks.listener.EndCrystalInteractListener;
+import nl.hauntedmc.fairperks.listener.GodMacroListener;
+import nl.hauntedmc.fairperks.listener.LavaPlaceListener;
+import nl.hauntedmc.fairperks.listener.MeleeListener;
+import nl.hauntedmc.fairperks.listener.ProjectileListener;
+import nl.hauntedmc.fairperks.listener.TargetListener;
+import nl.hauntedmc.fairperks.listener.TntIgniteListener;
 import nl.hauntedmc.fairperks.util.MessageService;
 import nl.hauntedmc.fairperks.util.YamlSyncUtil;
 
 import com.earth2me.essentials.Essentials;
 
 import org.bukkit.command.PluginCommand;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-
 
 public class FairPerks extends JavaPlugin {
 
@@ -81,42 +91,18 @@ public class FairPerks extends JavaPlugin {
     }
 
     private void registerListeners() {
-        if (this.getConfig().getBoolean("enabled.anchor")) {
-            this.getServer().getPluginManager().registerEvents(new AnchorInteractListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.bed")) {
-            this.getServer().getPluginManager().registerEvents(new BedInteractListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.blockignite")) {
-            this.getServer().getPluginManager().registerEvents(new BlockIgniteListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.spawnermobs")) {
-            this.getServer().getPluginManager().registerEvents(new CreatureSpawnListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.creeperignite")) {
-            this.getServer().getPluginManager().registerEvents(new CreeperIgniteListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.endcrystal")) {
-            this.getServer().getPluginManager().registerEvents(new EndCrystalInteractListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.godmacro")) {
-            this.getServer().getPluginManager().registerEvents(new GodMacroListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.lava")) {
-            this.getServer().getPluginManager().registerEvents(new LavaPlaceListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.melee")) {
-            this.getServer().getPluginManager().registerEvents(new MeleeListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.projectile")) {
-            this.getServer().getPluginManager().registerEvents(new ProjectileListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.target")) {
-            this.getServer().getPluginManager().registerEvents(new TargetListener(this), this);
-        }
-        if (this.getConfig().getBoolean("enabled.tntignite")) {
-            this.getServer().getPluginManager().registerEvents(new TntIgniteListener(this), this);
-        }
+        registerListenerIfEnabled("enabled.anchor", new AnchorInteractListener(this));
+        registerListenerIfEnabled("enabled.bed", new BedInteractListener(this));
+        registerListenerIfEnabled("enabled.blockignite", new BlockIgniteListener(this));
+        registerListenerIfEnabled("enabled.spawnermobs", new CreatureSpawnListener());
+        registerListenerIfEnabled("enabled.creeperignite", new CreeperIgniteListener(this));
+        registerListenerIfEnabled("enabled.endcrystal", new EndCrystalInteractListener(this));
+        registerListenerIfEnabled("enabled.godmacro", new GodMacroListener(this));
+        registerListenerIfEnabled("enabled.lava", new LavaPlaceListener(this));
+        registerListenerIfEnabled("enabled.melee", new MeleeListener(this));
+        registerListenerIfEnabled("enabled.projectile", new ProjectileListener(this));
+        registerListenerIfEnabled("enabled.target", new TargetListener(this));
+        registerListenerIfEnabled("enabled.tntignite", new TntIgniteListener(this));
     }
 
     private void registerCommands() {
@@ -127,6 +113,12 @@ public class FairPerks extends JavaPlugin {
                 return;
             }
             godMacroCommand.setExecutor(new GodMacroCommand(this));
+        }
+    }
+
+    private void registerListenerIfEnabled(String configPath, Listener listener) {
+        if (this.getConfig().getBoolean(configPath)) {
+            this.getServer().getPluginManager().registerEvents(listener, this);
         }
     }
 

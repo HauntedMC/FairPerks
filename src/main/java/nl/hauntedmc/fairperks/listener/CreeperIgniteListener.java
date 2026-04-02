@@ -1,9 +1,9 @@
 package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
+import nl.hauntedmc.fairperks.util.PlayerRestrictionUtil;
 
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -19,20 +19,22 @@ public class CreeperIgniteListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onCreeperIgnite(PlayerInteractEntityEvent event) {
-        if (event.getRightClicked().getType() == EntityType.CREEPER) {
-            Player player = event.getPlayer();
-
-            if (holdsIgniter(player)) {
-                if (this.plugin.getEssentialsHook().getUser(player).isGodModeEnabled()) {
-                    event.setCancelled(true);
-                    this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.creeper-ignite.god-mode");
-                } else if (player.isFlying()) {
-                    event.setCancelled(true);
-                    this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.creeper-ignite.flying");
-                }
-            }
+        if (event.getRightClicked().getType() != EntityType.CREEPER) {
+            return;
         }
+
+        if (event.getHand() == null || !holdsIgniter(event.getPlayer(), event.getHand())) {
+            return;
+        }
+
+        PlayerRestrictionUtil.denyWhenGodModeOrFlying(
+                this.plugin,
+                event.getPlayer(),
+                event,
+                "actionbar.deny.creeper-ignite.god-mode",
+                "actionbar.deny.creeper-ignite.flying"
+        );
     }
 }

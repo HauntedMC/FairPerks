@@ -1,10 +1,12 @@
 package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
+import nl.hauntedmc.fairperks.util.PlayerRestrictionUtil;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -18,27 +20,35 @@ public class EndCrystalInteractListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void crystalDamage(EntityDamageByEntityEvent event) {
-        Entity entity = event.getEntity();
-
-        if (entity.getType() == EntityType.END_CRYSTAL) {
-
-            Player player;
-
-            if (event.getDamager() instanceof Player) {
-                player = (Player) event.getDamager();
-            } else {
-                return;
-            }
-
-            if (this.plugin.getEssentialsHook().getUser(player).isGodModeEnabled()) {
-                event.setCancelled(true);
-                this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.end-crystal.god-mode");
-            } else if (player.isFlying()) {
-                event.setCancelled(true);
-                this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.end-crystal.flying");
-            }
+        if (event.getEntity().getType() != EntityType.END_CRYSTAL) {
+            return;
         }
+
+        Player player = resolvePlayerDamager(event.getDamager());
+        if (player == null) {
+            return;
+        }
+
+        PlayerRestrictionUtil.denyWhenGodModeOrFlying(
+                this.plugin,
+                player,
+                event,
+                "actionbar.deny.end-crystal.god-mode",
+                "actionbar.deny.end-crystal.flying"
+        );
+    }
+
+    private Player resolvePlayerDamager(Entity damager) {
+        if (damager instanceof Player player) {
+            return player;
+        }
+
+        if (damager instanceof Projectile projectile && projectile.getShooter() instanceof Player player) {
+            return player;
+        }
+
+        return null;
     }
 }

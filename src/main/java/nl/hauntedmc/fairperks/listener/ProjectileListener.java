@@ -2,6 +2,7 @@ package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.util.LegacyUtil;
+import nl.hauntedmc.fairperks.util.PlayerRestrictionUtil;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -21,31 +22,25 @@ public class ProjectileListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onProjectileHit(ProjectileHitEvent event) {
         Entity damagedEntity = event.getHitEntity();
-
-        if (damagedEntity != null && LegacyUtil.ENEMY.contains(damagedEntity.getType())) {
-            if (!isSpawnermob(damagedEntity)) {
-                Projectile projectile = event.getEntity();
-
-                Player player;
-
-                if (projectile.getShooter() instanceof Player) {
-                    player = (Player) projectile.getShooter();
-                } else {
-                    return;
-                }
-
-                if (this.plugin.getEssentialsHook().getUser(player).isGodModeEnabled()) {
-                    event.setCancelled(true);
-                    this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.mob-kill.god-mode");
-                } else if (player.isFlying()) {
-                    event.setCancelled(true);
-                    this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.mob-kill.flying");
-                }
-            }
+        if (damagedEntity == null || !LegacyUtil.isEnemy(damagedEntity.getType()) || isSpawnermob(damagedEntity)) {
+            return;
         }
+
+        Projectile projectile = event.getEntity();
+        if (!(projectile.getShooter() instanceof Player player)) {
+            return;
+        }
+
+        PlayerRestrictionUtil.denyWhenGodModeOrFlying(
+                this.plugin,
+                player,
+                event,
+                "actionbar.deny.mob-kill.god-mode",
+                "actionbar.deny.mob-kill.flying"
+        );
     }
 
 }

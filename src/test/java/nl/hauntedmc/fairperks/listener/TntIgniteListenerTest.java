@@ -11,6 +11,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -38,6 +39,7 @@ class TntIgniteListenerTest {
         when(clickedBlock.getType()).thenReturn(Material.TNT);
         when(event.getPlayer()).thenReturn(player);
         when(event.getAction()).thenReturn(Action.RIGHT_CLICK_BLOCK);
+        when(event.getHand()).thenReturn(EquipmentSlot.HAND);
         when(event.getClickedBlock()).thenReturn(clickedBlock);
 
         TntIgniteListener listener = new TntIgniteListener(plugin);

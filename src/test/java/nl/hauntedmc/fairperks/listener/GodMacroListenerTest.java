@@ -39,9 +39,9 @@ class GodMacroListenerTest {
         when(plugin.getConfig()).thenReturn(config);
         when(config.getInt("godmacrointerval")).thenReturn(500);
 
-        Map<NamespacedKey, String> dataMap = new HashMap<>();
-        dataMap.put(new NamespacedKey("fairperks", "godmacro"), "true");
-        PersistentDataContainer dataContainer = TestFixtures.mapBackedStringDataContainer(dataMap);
+        Map<NamespacedKey, Byte> dataMap = new HashMap<>();
+        dataMap.put(new NamespacedKey("fairperks", "godmacro"), (byte) 1);
+        PersistentDataContainer dataContainer = TestFixtures.mapBackedByteDataContainer(dataMap);
         when(player.getPersistentDataContainer()).thenReturn(dataContainer);
 
         PlayerToggleSneakEvent event = mock(PlayerToggleSneakEvent.class);
@@ -91,9 +91,9 @@ class GodMacroListenerTest {
         when(plugin.getConfig()).thenReturn(config);
         when(config.getInt("godmacrointerval")).thenReturn(500);
 
-        Map<NamespacedKey, String> dataMap = new HashMap<>();
-        dataMap.put(new NamespacedKey("fairperks", "godmacro"), "true");
-        PersistentDataContainer dataContainer = TestFixtures.mapBackedStringDataContainer(dataMap);
+        Map<NamespacedKey, Byte> dataMap = new HashMap<>();
+        dataMap.put(new NamespacedKey("fairperks", "godmacro"), (byte) 1);
+        PersistentDataContainer dataContainer = TestFixtures.mapBackedByteDataContainer(dataMap);
         when(player.getPersistentDataContainer()).thenReturn(dataContainer);
 
         PlayerToggleSneakEvent sneakEvent = mock(PlayerToggleSneakEvent.class);

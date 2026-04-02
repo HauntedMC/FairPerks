@@ -30,8 +30,8 @@ class GodMacroCommandTest {
         Player player = mock(Player.class);
         when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
 
-        Map<NamespacedKey, String> dataMap = new HashMap<>();
-        PersistentDataContainer dataContainer = TestFixtures.mapBackedStringDataContainer(dataMap);
+        Map<NamespacedKey, Byte> dataMap = new HashMap<>();
+        PersistentDataContainer dataContainer = TestFixtures.mapBackedByteDataContainer(dataMap);
         when(player.getPersistentDataContainer()).thenReturn(dataContainer);
 
         GodMacroCommand godMacroCommand = new GodMacroCommand(plugin);
@@ -43,7 +43,7 @@ class GodMacroCommandTest {
         );
 
         assertTrue(result);
-        assertEquals("true", dataMap.values().iterator().next());
+        assertEquals(Byte.valueOf((byte) 1), dataMap.values().iterator().next());
         verify(messageService).sendMessage(player, "command.godmacro.enabled");
     }
 
@@ -55,11 +55,11 @@ class GodMacroCommandTest {
         Player player = mock(Player.class);
         when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
 
-        Map<NamespacedKey, String> dataMap = new HashMap<>();
+        Map<NamespacedKey, Byte> dataMap = new HashMap<>();
         NamespacedKey key = new NamespacedKey("fairperks", "godmacro");
-        dataMap.put(key, "true");
+        dataMap.put(key, (byte) 1);
 
-        PersistentDataContainer dataContainer = TestFixtures.mapBackedStringDataContainer(dataMap);
+        PersistentDataContainer dataContainer = TestFixtures.mapBackedByteDataContainer(dataMap);
         when(player.getPersistentDataContainer()).thenReturn(dataContainer);
 
         GodMacroCommand godMacroCommand = new GodMacroCommand(plugin);
@@ -71,7 +71,7 @@ class GodMacroCommandTest {
         );
 
         assertTrue(result);
-        assertEquals("false", dataMap.get(key));
+        assertEquals(Byte.valueOf((byte) 0), dataMap.get(key));
         verify(messageService).sendMessage(player, "command.godmacro.disabled");
     }
 

@@ -2,6 +2,7 @@ package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.util.LegacyUtil;
+import nl.hauntedmc.fairperks.util.PlayerRestrictionUtil;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -22,30 +23,30 @@ public class BlockIgniteListener implements Listener {
         this.plugin = plugin;
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onBlockIgniteNearMobs(BlockIgniteEvent event) {
         if (!isConfiguredCause(event.getCause())) {
             return;
         }
 
-        Player damager = event.getPlayer();
-
-        if (damager == null) {
+        Player player = event.getPlayer();
+        if (player == null) {
             return;
         }
 
-        final int entityRange = this.plugin.getConfig().getInt("ignite_entityrange");
-        List<Entity> nearbyEntities = damager.getNearbyEntities(entityRange, entityRange, entityRange);
-
-        if (nearbyEntities.stream().anyMatch(entity -> LegacyUtil.ENEMY.contains(entity.getType()))) {
-            if (this.plugin.getEssentialsHook().getUser(damager).isGodModeEnabled()) {
-                event.setCancelled(true);
-                this.plugin.getMessageService().sendActionBar(damager, "actionbar.deny.blockignite.god-mode");
-            } else if (damager.isFlying()) {
-                event.setCancelled(true);
-                this.plugin.getMessageService().sendActionBar(damager, "actionbar.deny.blockignite.flying");
-            }
+        int entityRange = this.plugin.getConfig().getInt("ignite_entityrange");
+        List<Entity> nearbyEntities = player.getNearbyEntities(entityRange, entityRange, entityRange);
+        if (nearbyEntities.stream().noneMatch(entity -> LegacyUtil.isEnemy(entity.getType()))) {
+            return;
         }
+
+        PlayerRestrictionUtil.denyWhenGodModeOrFlying(
+                this.plugin,
+                player,
+                event,
+                "actionbar.deny.blockignite.god-mode",
+                "actionbar.deny.blockignite.flying"
+        );
     }
 
     private boolean isConfiguredCause(IgniteCause cause) {
