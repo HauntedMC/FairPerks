@@ -6,7 +6,9 @@
 [![Java 21](https://img.shields.io/badge/Java-21-007396?logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![License](https://img.shields.io/github/license/HauntedMC/FairPerks)](LICENSE)
 
-EULA-friendly PvP safety perks for Paper servers, including controlled god-mode combat protections and anti-exploit interaction rules.
+FairPerks helps make EssentialsX perks like `god` and `fly` suitable as donor perks by enforcing fair, EULA-friendly combat and interaction limits on Paper servers.
+
+Instead of removing those perks entirely, FairPerks adds guardrails so they cannot be abused for PvE or PvP advantage.
 
 ## Quick Start
 
