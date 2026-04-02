@@ -1,3 +1,5 @@
+language: default
+
 enabled:
   anchor: true
   bed: true

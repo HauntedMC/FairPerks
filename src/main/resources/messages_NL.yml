@@ -1,0 +1,31 @@
+command:
+  godmacro:
+    enabled: "<yellow>De god macro (dubbelshift) is nu ingeschakeld.</yellow>"
+    disabled: "<yellow>De god macro (dubbelshift) is nu uitgeschakeld.</yellow>"
+
+actionbar:
+  deny:
+    anchor:
+      god-mode: "<red>Je kunt geen respawn anchor opblazen in god mode.</red>"
+      flying: "<red>Je kunt geen respawn anchor opblazen terwijl je vliegt.</red>"
+    bed:
+      god-mode: "<red>Je kunt geen bedden opblazen in god mode.</red>"
+      flying: "<red>Je kunt geen bedden opblazen terwijl je vliegt.</red>"
+    blockignite:
+      god-mode: "<red>Je kunt geen vuur aansteken bij mobs in god mode.</red>"
+      flying: "<red>Je kunt geen vuur aansteken bij mobs terwijl je vliegt.</red>"
+    creeper-ignite:
+      god-mode: "<red>Je kunt geen creepers igniten in god mode.</red>"
+      flying: "<red>Je kunt geen creepers igniten terwijl je vliegt.</red>"
+    end-crystal:
+      god-mode: "<red>Je kunt geen end crystals opblazen in god mode.</red>"
+      flying: "<red>Je kunt geen end crystals opblazen terwijl je vliegt.</red>"
+    lava:
+      god-mode: "<red>Je kunt geen lava plaatsen bij mobs in god mode.</red>"
+      flying: "<red>Je kunt geen lava plaatsen bij mobs terwijl je vliegt.</red>"
+    mob-kill:
+      god-mode: "<red>Je kunt geen mobs killen in god mode.</red>"
+      flying: "<red>Je kunt geen mobs killen terwijl je vliegt.</red>"
+    tnt-ignite:
+      god-mode: "<red>Je kunt geen tnt opblazen bij mobs in god mode.</red>"
+      flying: "<red>Je kunt geen tnt opblazen bij mobs terwijl je vliegt.</red>"

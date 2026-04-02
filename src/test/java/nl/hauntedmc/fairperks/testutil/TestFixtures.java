@@ -1,6 +1,7 @@
 package nl.hauntedmc.fairperks.testutil;
 
 import nl.hauntedmc.fairperks.FairPerks;
+import nl.hauntedmc.fairperks.util.MessageService;
 
 import com.earth2me.essentials.Essentials;
 import com.earth2me.essentials.User;
@@ -42,6 +43,8 @@ public final class TestFixtures {
     }
 
     public static void stubGodMode(FairPerks plugin, Player player, boolean godMode) {
+        stubMessageService(plugin);
+
         Essentials essentials = mock(Essentials.class);
         User user = mock(User.class);
 
@@ -51,6 +54,8 @@ public final class TestFixtures {
     }
 
     public static void stubCombatState(FairPerks plugin, Player player, boolean inCombat) {
+        stubMessageService(plugin);
+
         Plugin combatLogHook = mock(Plugin.class, withSettings().extraInterfaces(CombatLogAccessor.class));
         CombatManagerAccessor combatManager = mock(CombatManagerAccessor.class);
 
@@ -93,6 +98,12 @@ public final class TestFixtures {
         }).when(dataContainer).set(any(NamespacedKey.class), eq(PersistentDataType.STRING), anyString());
 
         return dataContainer;
+    }
+
+    public static MessageService stubMessageService(FairPerks plugin) {
+        MessageService messageService = mock(MessageService.class);
+        when(plugin.getMessageService()).thenReturn(messageService);
+        return messageService;
     }
 
     public interface CombatLogAccessor {

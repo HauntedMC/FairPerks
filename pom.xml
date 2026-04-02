@@ -163,10 +163,6 @@
             <id>essentials-snapshots</id>
             <url>https://repo.essentialsx.net/snapshots/</url>
         </repository>
-        <repository>
-            <id>sirblobman-public</id>
-            <url>https://nexus.sirblobman.xyz/public/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -174,6 +170,12 @@
             <groupId>io.papermc.paper</groupId>
             <artifactId>paper-api</artifactId>
             <version>${paper.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-minimessage</artifactId>
+            <version>4.26.1</version>
             <scope>provided</scope>
         </dependency>
         <dependency>

@@ -14,8 +14,9 @@ EULA-friendly PvP safety perks for Paper servers, including controlled god-mode 
 2. Install dependency: EssentialsX.
 3. Optional: install CombatLogX to enable in-combat blocking for god macro.
 4. Start the server once to generate `config.yml`.
-5. Enable only the features you want under `enabled`.
-6. Restart and validate behavior in-game.
+5. Set `language` in `config.yml` (`default`, `NL`, or your own `messages_<LANG>.yml`).
+6. Enable only the features you want under `enabled`.
+7. Restart and validate behavior in-game.
 
 ## Requirements
 

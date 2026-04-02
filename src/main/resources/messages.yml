@@ -1,0 +1,31 @@
+command:
+  godmacro:
+    enabled: "<yellow>God macro (double-shift) is now enabled.</yellow>"
+    disabled: "<yellow>God macro (double-shift) is now disabled.</yellow>"
+
+actionbar:
+  deny:
+    anchor:
+      god-mode: "<red>You cannot explode respawn anchors while in god mode.</red>"
+      flying: "<red>You cannot explode respawn anchors while flying.</red>"
+    bed:
+      god-mode: "<red>You cannot explode beds while in god mode.</red>"
+      flying: "<red>You cannot explode beds while flying.</red>"
+    blockignite:
+      god-mode: "<red>You cannot ignite blocks near hostile mobs while in god mode.</red>"
+      flying: "<red>You cannot ignite blocks near hostile mobs while flying.</red>"
+    creeper-ignite:
+      god-mode: "<red>You cannot ignite creepers while in god mode.</red>"
+      flying: "<red>You cannot ignite creepers while flying.</red>"
+    end-crystal:
+      god-mode: "<red>You cannot break end crystals while in god mode.</red>"
+      flying: "<red>You cannot break end crystals while flying.</red>"
+    lava:
+      god-mode: "<red>You cannot place lava near hostile mobs while in god mode.</red>"
+      flying: "<red>You cannot place lava near hostile mobs while flying.</red>"
+    mob-kill:
+      god-mode: "<red>You cannot kill hostile mobs while in god mode.</red>"
+      flying: "<red>You cannot kill hostile mobs while flying.</red>"
+    tnt-ignite:
+      god-mode: "<red>You cannot ignite TNT near hostile mobs while in god mode.</red>"
+      flying: "<red>You cannot ignite TNT near hostile mobs while flying.</red>"

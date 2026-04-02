@@ -3,10 +3,6 @@ package nl.hauntedmc.fairperks.listener;
 import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.util.LegacyUtil;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
-
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,17 +28,13 @@ public class LavaPlaceListener implements Listener {
             final int entityRange = this.plugin.getConfig().getInt("lava_entityrange");
             List<Entity> nearbyEntities = player.getNearbyEntities(entityRange, entityRange, entityRange);
 
-            final String denyMessage = ChatColor.RED + "Je kunt geen lava plaatsen bij mobs %s.";
-
             if (nearbyEntities.stream().anyMatch(entity -> LegacyUtil.ENEMY.contains(entity.getType()))) {
                 if (this.plugin.getEssentialsHook().getUser(player).isGodModeEnabled()) {
                     event.setCancelled(true);
-                    //noinspection deprecation
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(String.format(denyMessage, "in god mode")));
+                    this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.lava.god-mode");
                 } else if (player.isFlying()) {
                     event.setCancelled(true);
-                    //noinspection deprecation
-                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(String.format(denyMessage, "terwijl je vliegt")));
+                    this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.lava.flying");
                 }
             }
         }

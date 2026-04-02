@@ -2,6 +2,7 @@ package nl.hauntedmc.fairperks.command;
 
 import nl.hauntedmc.fairperks.FairPerks;
 import nl.hauntedmc.fairperks.testutil.TestFixtures;
+import nl.hauntedmc.fairperks.util.MessageService;
 
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
@@ -24,6 +25,7 @@ class GodMacroCommandTest {
     @Test
     void onCommandEnablesMacroWhenNoStoredValueExists() {
         FairPerks plugin = mock(FairPerks.class);
+        MessageService messageService = TestFixtures.stubMessageService(plugin);
 
         Player player = mock(Player.class);
         when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
@@ -42,12 +44,13 @@ class GodMacroCommandTest {
 
         assertTrue(result);
         assertEquals("true", dataMap.values().iterator().next());
-        verify(player).sendMessage(org.mockito.ArgumentMatchers.contains("ingeschakeld"));
+        verify(messageService).sendMessage(player, "command.godmacro.enabled");
     }
 
     @Test
     void onCommandDisablesMacroWhenStoredValueIsTrue() {
         FairPerks plugin = mock(FairPerks.class);
+        MessageService messageService = TestFixtures.stubMessageService(plugin);
 
         Player player = mock(Player.class);
         when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
@@ -69,7 +72,7 @@ class GodMacroCommandTest {
 
         assertTrue(result);
         assertEquals("false", dataMap.get(key));
-        verify(player).sendMessage(org.mockito.ArgumentMatchers.contains("uitgeschakeld"));
+        verify(messageService).sendMessage(player, "command.godmacro.disabled");
     }
 
     @Test

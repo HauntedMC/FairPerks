@@ -3,6 +3,7 @@ package nl.hauntedmc.fairperks;
 
 import nl.hauntedmc.fairperks.command.GodMacroCommand;
 import nl.hauntedmc.fairperks.listener.*;
+import nl.hauntedmc.fairperks.util.MessageService;
 
 import com.earth2me.essentials.Essentials;
 
@@ -15,11 +16,13 @@ public class FairPerks extends JavaPlugin {
 
     private Essentials essentialsHook;
     private Plugin combatlogHook;
+    private MessageService messageService;
 
     @Override
     public void onEnable() {
         this.getLogger().info("FairPerks wordt geladen.");
         initializeConfig();
+        initializeMessageService();
         registerPluginHooks();
         if (!isEnabled()) {
             return;
@@ -36,9 +39,18 @@ public class FairPerks extends JavaPlugin {
         return combatlogHook;
     }
 
+    public MessageService getMessageService() {
+        return messageService;
+    }
+
     private void initializeConfig() {
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
+    }
+
+    private void initializeMessageService() {
+        this.messageService = new MessageService(this);
+        this.messageService.load();
     }
 
     private void registerPluginHooks() {

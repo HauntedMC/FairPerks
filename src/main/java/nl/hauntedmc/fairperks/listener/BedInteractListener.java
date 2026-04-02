@@ -2,10 +2,6 @@ package nl.hauntedmc.fairperks.listener;
 
 import nl.hauntedmc.fairperks.FairPerks;
 
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
-
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.type.Bed;
@@ -33,16 +29,12 @@ public class BedInteractListener implements Listener {
                 if (event.getClickedBlock().getWorld().getEnvironment() != World.Environment.NORMAL) {
                     Player player = event.getPlayer();
 
-                    final String denyMessage = ChatColor.RED + "Je kunt geen bedden opblazen %s.";
-
                     if (this.plugin.getEssentialsHook().getUser(player).isGodModeEnabled()) {
                         event.setCancelled(true);
-                        //noinspection deprecation
-                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(String.format(denyMessage, "in god mode")));
+                        this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.bed.god-mode");
                     } else if (player.isFlying()) {
                         event.setCancelled(true);
-                        //noinspection deprecation
-                        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, TextComponent.fromLegacyText(String.format(denyMessage, "terwijl je vliegt")));
+                        this.plugin.getMessageService().sendActionBar(player, "actionbar.deny.bed.flying");
                     }
                 }
             }

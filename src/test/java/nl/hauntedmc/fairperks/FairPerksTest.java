@@ -1,6 +1,7 @@
 package nl.hauntedmc.fairperks;
 
 import com.earth2me.essentials.Essentials;
+import nl.hauntedmc.fairperks.util.MessageService;
 import org.junit.jupiter.api.Test;
 import org.bukkit.plugin.Plugin;
 
@@ -31,6 +32,16 @@ class FairPerksTest {
         setPrivateField(plugin, "combatlogHook", combatLogX);
 
         assertSame(combatLogX, plugin.getCombatlogHook());
+    }
+
+    @Test
+    void getMessageServiceReturnsAssignedService() throws Exception {
+        FairPerks plugin = mock(FairPerks.class, withSettings().defaultAnswer(CALLS_REAL_METHODS));
+        MessageService messageService = mock(MessageService.class);
+
+        setPrivateField(plugin, "messageService", messageService);
+
+        assertSame(messageService, plugin.getMessageService());
     }
 
     private static void setPrivateField(Object target, String fieldName, Object value) throws Exception {

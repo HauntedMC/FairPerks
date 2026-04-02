@@ -7,6 +7,18 @@ This guide focuses on practical setup and safe operation of FairPerks in product
 FairPerks uses one main runtime file:
 
 - `plugins/FairPerks/config.yml`
+- `plugins/FairPerks/messages.yml` (default English messages)
+- `plugins/FairPerks/messages_NL.yml` (Dutch translation)
+
+## Language Selection
+
+Set `language` in `config.yml`:
+
+- `default`: use `messages.yml`
+- `NL`: use `messages_NL.yml`
+- any custom code (for example `DE`): attempts `messages_DE.yml`
+
+If the selected language file does not exist, FairPerks automatically falls back to `messages.yml`.
 
 ## Feature Toggles
 

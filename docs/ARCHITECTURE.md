@@ -17,6 +17,7 @@ FairPerks is a Paper plugin focused on controlled PvP safety behavior while resp
 - Utility package:
   - `CombatUtil`: optional CombatLogX combat-state adapter (safe no-op when unavailable).
   - `InventoryUtil`: igniter item detection.
+  - `MessageService`: language-file loading and MiniMessage/Adventure component rendering.
   - `SpawnerUtil`: spawner metadata read/write helpers.
   - `LegacyUtil`: hostile entity allowlist used by multiple listeners.
 
