@@ -29,7 +29,7 @@ public class LavaPlaceListener implements Listener {
         if (event.getBucket() == Material.LAVA_BUCKET) {
             Player player = event.getPlayer();
 
-            final int entityRange = this.plugin.getConfig().getInt("lavs_entityrange");
+            final int entityRange = this.plugin.getConfig().getInt("lava_entityrange");
             List<Entity> nearbyEntities = player.getNearbyEntities(entityRange, entityRange, entityRange);
 
             final String denyMessage = ChatColor.RED + "Je kunt geen lava plaatsen bij mobs %s.";

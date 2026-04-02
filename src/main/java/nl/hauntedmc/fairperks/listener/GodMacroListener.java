@@ -17,6 +17,7 @@ import static nl.hauntedmc.fairperks.util.CombatUtil.isInCombat;
 
 public class GodMacroListener implements Listener {
 
+    private static final NamespacedKey GOD_MACRO_KEY = new NamespacedKey("fairperks", "godmacro");
     private final FairPerks plugin;
     private final Map<Player, Long> shiftTimestamps;
 
@@ -31,11 +32,10 @@ public class GodMacroListener implements Listener {
 
         if (player.hasPermission("essentials.god") && player.hasPermission("fairperks.godmacro")) {
             if (!isInCombat(player, this.plugin)) {
-                NamespacedKey key = new NamespacedKey(this.plugin, "godmacro");
                 PersistentDataContainer playerMeta = player.getPersistentDataContainer();
 
-                if (playerMeta.has(key, PersistentDataType.STRING)) {
-                    String macroStatus = playerMeta.get(key, PersistentDataType.STRING);
+                if (playerMeta.has(GOD_MACRO_KEY, PersistentDataType.STRING)) {
+                    String macroStatus = playerMeta.get(GOD_MACRO_KEY, PersistentDataType.STRING);
 
                     if (macroStatus != null && macroStatus.equals("true")) {
                         if (player.isSneaking()) {

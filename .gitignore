@@ -28,3 +28,4 @@ target
 *.iml
 
 pom.xml.versionsBackup
+.m2/
