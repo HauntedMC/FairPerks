@@ -160,6 +160,37 @@ class GodMacroListenerTest {
     }
 
     @Test
+    void onPlayerShiftToggleGodUsesDefaultIntervalWhenConfigIsNonPositive() {
+        FairPerks plugin = mock(FairPerks.class);
+
+        Player player = mock(Player.class);
+        UUID playerId = UUID.randomUUID();
+        when(player.hasPermission("essentials.god")).thenReturn(true);
+        when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
+        when(player.getUniqueId()).thenReturn(playerId);
+        when(player.getNearbyEntities(16, 16, 16)).thenReturn(java.util.List.of());
+
+        TestFixtures.stubCombatState(plugin, player, false);
+        PersistentDataContainer dataContainer = godMacroEnabledContainer();
+        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
+
+        FileConfiguration config = mock(FileConfiguration.class);
+        when(plugin.getConfig()).thenReturn(config);
+        when(config.getInt("godmacrointerval")).thenReturn(0);
+        when(config.getInt("perktoggle_entityrange")).thenReturn(16);
+
+        PlayerToggleSneakEvent event = mock(PlayerToggleSneakEvent.class);
+        when(event.getPlayer()).thenReturn(player);
+        when(event.isSneaking()).thenReturn(true);
+
+        GodMacroListener listener = new GodMacroListener(plugin);
+        listener.onPlayerShiftToggleGod(event);
+        listener.onPlayerShiftToggleGod(event);
+
+        verify(player, times(1)).performCommand("god");
+    }
+
+    @Test
     void onPlayerQuitClearsPendingMacroState() {
         FairPerks plugin = mock(FairPerks.class);
 

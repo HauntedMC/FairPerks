@@ -39,4 +39,25 @@ class LavaPlaceListenerTest {
 
         verify(event).setCancelled(true);
     }
+
+    @Test
+    void onLavaBucketInteractUsesDefaultRangeWhenConfigIsNonPositive() {
+        FairPerks plugin = mock(FairPerks.class);
+        Player player = TestFixtures.mockPlayerWithSpigot(true);
+        Entity enemy = TestFixtures.mockEntityOfType(EntityType.CREEPER);
+        PlayerBucketEmptyEvent event = mock(PlayerBucketEmptyEvent.class);
+        FileConfiguration config = mock(FileConfiguration.class);
+
+        TestFixtures.stubGodMode(plugin, player, false);
+        when(plugin.getConfig()).thenReturn(config);
+        when(config.getInt("lava_entityrange")).thenReturn(0);
+        when(event.getBucket()).thenReturn(Material.LAVA_BUCKET);
+        when(event.getPlayer()).thenReturn(player);
+        when(player.getNearbyEntities(5, 5, 5)).thenReturn(List.of(enemy));
+
+        LavaPlaceListener listener = new LavaPlaceListener(plugin);
+        listener.onLavaBucketInteract(event);
+
+        verify(event).setCancelled(true);
+    }
 }

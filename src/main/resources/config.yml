@@ -4,7 +4,7 @@ enabled:
   anchor: true
   bed: true
   blockignite: true
-  spawnermobs: true
+  spawnermobs: false
   creeperignite: true
   endcrystal: true
   godmacro: true

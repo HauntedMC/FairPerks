@@ -47,4 +47,30 @@ class TntIgniteListenerTest {
 
         verify(event).setCancelled(true);
     }
+
+    @Test
+    void onTntIgniteUsesDefaultRangeWhenConfigIsNonPositive() {
+        FairPerks plugin = mock(FairPerks.class);
+        FileConfiguration config = mock(FileConfiguration.class);
+        Player player = TestFixtures.mockPlayerWithSpigot(true);
+        Entity enemy = TestFixtures.mockEntityOfType(EntityType.CREEPER);
+        Block clickedBlock = mock(Block.class);
+        PlayerInteractEvent event = mock(PlayerInteractEvent.class);
+
+        TestFixtures.stubGodMode(plugin, player, false);
+        TestFixtures.stubMainHandMaterial(player, Material.FLINT_AND_STEEL);
+        when(plugin.getConfig()).thenReturn(config);
+        when(config.getInt("tnt_entityrange")).thenReturn(0);
+        when(player.getNearbyEntities(10, 10, 10)).thenReturn(List.of(enemy));
+        when(clickedBlock.getType()).thenReturn(Material.TNT);
+        when(event.getPlayer()).thenReturn(player);
+        when(event.getAction()).thenReturn(Action.RIGHT_CLICK_BLOCK);
+        when(event.getHand()).thenReturn(EquipmentSlot.HAND);
+        when(event.getClickedBlock()).thenReturn(clickedBlock);
+
+        TntIgniteListener listener = new TntIgniteListener(plugin);
+        listener.onTNTIgnite(event);
+
+        verify(event).setCancelled(true);
+    }
 }

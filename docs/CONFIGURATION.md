@@ -37,13 +37,13 @@ Most behavior is controlled by the `enabled` section:
 - `anchor`: respawn-anchor interaction protection.
 - `bed`: bed explosion interaction protection.
 - `blockignite`: ignition-near-mobs protection by cause list.
-- `spawnermobs`: marks eligible spawner mobs with persistent data.
+- `spawnermobs`: marks eligible spawner mobs with persistent data. Keep this disabled unless your server already nerfs AI on player-spawned spawner mobs; otherwise those mobs are treated as normal hostile mobs by FairPerks.
 - `creeperignite`: flint/fire-charge creeper ignite protection.
 - `endcrystal`: end crystal damage protection.
 - `godmacro`: double-shift god command macro.
 - `lava`: lava bucket placement protection.
 - `melee`: melee combat restriction logic.
-- `perktoggleguard`: blocks enabling `/god` or `/fly` while in combat or near hostile mobs.
+- `perktoggleguard`: blocks enabling Essentials god/fly while in combat or near hostile mobs.
 - `pvp`: prevents damaging other players while in god mode or flying.
 - `projectile`: projectile combat restriction logic.
 - `target`: hostile targeting suppression logic.

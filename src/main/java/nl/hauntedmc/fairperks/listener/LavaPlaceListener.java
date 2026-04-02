@@ -14,6 +14,9 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import java.util.List;
 
 public class LavaPlaceListener implements Listener {
+
+    private static final int DEFAULT_LAVA_ENTITY_RANGE = 5;
+
     private final FairPerks plugin;
 
     public LavaPlaceListener(FairPerks plugin) {
@@ -27,6 +30,9 @@ public class LavaPlaceListener implements Listener {
         }
 
         int entityRange = this.plugin.getConfig().getInt("lava_entityrange");
+        if (entityRange <= 0) {
+            entityRange = DEFAULT_LAVA_ENTITY_RANGE;
+        }
         List<Entity> nearbyEntities = event.getPlayer().getNearbyEntities(entityRange, entityRange, entityRange);
         if (nearbyEntities.stream().noneMatch(entity -> LegacyUtil.isEnemy(entity.getType()))) {
             return;

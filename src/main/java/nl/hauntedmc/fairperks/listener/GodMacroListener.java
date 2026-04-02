@@ -24,6 +24,8 @@ import java.util.UUID;
  */
 public class GodMacroListener implements Listener {
 
+    private static final int DEFAULT_GOD_MACRO_INTERVAL = 350;
+
     private final FairPerks plugin;
     private final Map<UUID, Long> shiftTimestamps;
 
@@ -53,6 +55,9 @@ public class GodMacroListener implements Listener {
         Long lastShiftTime = shiftTimestamps.get(playerId);
 
         int godMacroInterval = this.plugin.getConfig().getInt("godmacrointerval");
+        if (godMacroInterval <= 0) {
+            godMacroInterval = DEFAULT_GOD_MACRO_INTERVAL;
+        }
         if (lastShiftTime != null && currentTime - lastShiftTime < godMacroInterval) {
             // Guard only when this macro toggle would turn god mode on.
             if (!PlayerRestrictionUtil.isInGodMode(player, this.plugin)

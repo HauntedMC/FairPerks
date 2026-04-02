@@ -19,6 +19,8 @@ import static nl.hauntedmc.fairperks.util.InventoryUtil.holdsIgniter;
 
 public class TntIgniteListener implements Listener {
 
+    private static final int DEFAULT_TNT_ENTITY_RANGE = 10;
+
     private final FairPerks plugin;
 
     public TntIgniteListener(FairPerks plugin) {
@@ -41,6 +43,9 @@ public class TntIgniteListener implements Listener {
         }
 
         int entityRange = this.plugin.getConfig().getInt("tnt_entityrange");
+        if (entityRange <= 0) {
+            entityRange = DEFAULT_TNT_ENTITY_RANGE;
+        }
         List<Entity> nearbyEntities = event.getPlayer().getNearbyEntities(entityRange, entityRange, entityRange);
         if (nearbyEntities.stream().noneMatch(entity -> LegacyUtil.isEnemy(entity.getType()))) {
             return;

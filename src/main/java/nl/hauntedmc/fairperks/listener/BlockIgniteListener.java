@@ -17,6 +17,8 @@ import java.util.Locale;
 
 public class BlockIgniteListener implements Listener {
 
+    private static final int DEFAULT_IGNITE_ENTITY_RANGE = 5;
+
     private final FairPerks plugin;
 
     public BlockIgniteListener(FairPerks plugin) {
@@ -35,6 +37,9 @@ public class BlockIgniteListener implements Listener {
         }
 
         int entityRange = this.plugin.getConfig().getInt("ignite_entityrange");
+        if (entityRange <= 0) {
+            entityRange = DEFAULT_IGNITE_ENTITY_RANGE;
+        }
         List<Entity> nearbyEntities = player.getNearbyEntities(entityRange, entityRange, entityRange);
         if (nearbyEntities.stream().noneMatch(entity -> LegacyUtil.isEnemy(entity.getType()))) {
             return;
