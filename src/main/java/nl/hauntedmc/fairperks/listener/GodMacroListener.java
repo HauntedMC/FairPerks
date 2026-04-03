@@ -37,7 +37,6 @@ public class GodMacroListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerShiftToggleGod(PlayerToggleSneakEvent event) {
         Player player = event.getPlayer();
-        // Trigger only on the "press" transition of sneaking.
         if (!event.isSneaking()) {
             return;
         }
@@ -58,16 +57,16 @@ public class GodMacroListener implements Listener {
         if (godMacroInterval <= 0) {
             godMacroInterval = DEFAULT_GOD_MACRO_INTERVAL;
         }
+
         if (lastShiftTime != null && currentTime - lastShiftTime < godMacroInterval) {
-            // Guard only when this macro toggle would turn god mode on.
-            if (!PlayerRestrictionUtil.isInGodMode(player, this.plugin)
-                    && !PerkToggleGuardUtil.canEnablePerk(player, this.plugin)) {
-                shiftTimestamps.remove(playerId);
+            shiftTimestamps.remove(playerId);
+
+            boolean enablingGodMode = !PlayerRestrictionUtil.isInGodMode(player, this.plugin);
+            if (enablingGodMode && !PerkToggleGuardUtil.canEnablePerk(player, this.plugin)) {
                 return;
             }
 
             player.performCommand("god");
-            shiftTimestamps.remove(playerId);
             return;
         }
 
@@ -76,7 +75,6 @@ public class GodMacroListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerQuit(PlayerQuitEvent event) {
-        // Avoid stale timestamps for players that reconnect later.
         shiftTimestamps.remove(event.getPlayer().getUniqueId());
     }
 }

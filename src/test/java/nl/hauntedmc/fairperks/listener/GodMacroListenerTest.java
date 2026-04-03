@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -49,6 +50,7 @@ class GodMacroListenerTest {
 
         FileConfiguration config = mock(FileConfiguration.class);
         when(plugin.getConfig()).thenReturn(config);
+        when(config.getBoolean("enabled.perktoggleguard", true)).thenReturn(true);
         when(config.getInt("godmacrointerval")).thenReturn(500);
         when(config.getInt("perktoggle_entityrange")).thenReturn(16);
 
@@ -80,6 +82,7 @@ class GodMacroListenerTest {
 
         FileConfiguration config = mock(FileConfiguration.class);
         when(plugin.getConfig()).thenReturn(config);
+        when(config.getBoolean("enabled.perktoggleguard", true)).thenReturn(true);
         when(config.getInt("godmacrointerval")).thenReturn(500);
         when(config.getInt("perktoggle_entityrange")).thenReturn(16);
 
@@ -93,40 +96,6 @@ class GodMacroListenerTest {
 
         verify(player, never()).performCommand("god");
         verify(messageService).sendActionBar(player, "actionbar.deny.perk-toggle.combat");
-    }
-
-    @Test
-    void onPlayerShiftToggleGodBlocksEnablingMacroWhenHostilesAreNearby() {
-        FairPerks plugin = mock(FairPerks.class);
-
-        Player player = mock(Player.class);
-        UUID playerId = UUID.randomUUID();
-        Entity hostile = TestFixtures.mockEntityOfType(EntityType.CREEPER);
-        when(player.getUniqueId()).thenReturn(playerId);
-        when(player.hasPermission("essentials.god")).thenReturn(true);
-        when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
-        when(player.getNearbyEntities(16, 16, 16)).thenReturn(java.util.List.of(hostile));
-
-        TestFixtures.stubCombatState(plugin, player, false);
-        MessageService messageService = TestFixtures.stubMessageService(plugin);
-        PersistentDataContainer dataContainer = godMacroEnabledContainer();
-        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
-
-        FileConfiguration config = mock(FileConfiguration.class);
-        when(plugin.getConfig()).thenReturn(config);
-        when(config.getInt("godmacrointerval")).thenReturn(500);
-        when(config.getInt("perktoggle_entityrange")).thenReturn(16);
-
-        PlayerToggleSneakEvent sneakEvent = mock(PlayerToggleSneakEvent.class);
-        when(sneakEvent.getPlayer()).thenReturn(player);
-        when(sneakEvent.isSneaking()).thenReturn(true);
-
-        GodMacroListener listener = new GodMacroListener(plugin);
-        listener.onPlayerShiftToggleGod(sneakEvent);
-        listener.onPlayerShiftToggleGod(sneakEvent);
-
-        verify(player, never()).performCommand("god");
-        verify(messageService).sendActionBar(player, "actionbar.deny.perk-toggle.hostile-nearby");
     }
 
     @Test
@@ -146,6 +115,7 @@ class GodMacroListenerTest {
 
         FileConfiguration config = mock(FileConfiguration.class);
         when(plugin.getConfig()).thenReturn(config);
+        when(config.getBoolean("enabled.perktoggleguard", true)).thenReturn(true);
         when(config.getInt("godmacrointerval")).thenReturn(500);
 
         PlayerToggleSneakEvent sneakEvent = mock(PlayerToggleSneakEvent.class);
@@ -176,6 +146,7 @@ class GodMacroListenerTest {
 
         FileConfiguration config = mock(FileConfiguration.class);
         when(plugin.getConfig()).thenReturn(config);
+        when(config.getBoolean("enabled.perktoggleguard", true)).thenReturn(true);
         when(config.getInt("godmacrointerval")).thenReturn(0);
         when(config.getInt("perktoggle_entityrange")).thenReturn(16);
 
@@ -188,6 +159,43 @@ class GodMacroListenerTest {
         listener.onPlayerShiftToggleGod(event);
 
         verify(player, times(1)).performCommand("god");
+    }
+
+    @Test
+    void onPlayerShiftToggleGodSkipsGuardWhenPerkToggleGuardIsDisabled() {
+        FairPerks plugin = mock(FairPerks.class);
+
+        Player player = mock(Player.class);
+        UUID playerId = UUID.randomUUID();
+        when(player.hasPermission("essentials.god")).thenReturn(true);
+        when(player.hasPermission("fairperks.godmacro")).thenReturn(true);
+        when(player.getUniqueId()).thenReturn(playerId);
+
+        TestFixtures.stubCombatState(plugin, player, true);
+        PersistentDataContainer dataContainer = godMacroEnabledContainer();
+        when(player.getPersistentDataContainer()).thenReturn(dataContainer);
+
+        Entity hostile = mock(Entity.class);
+        when(hostile.getType()).thenReturn(EntityType.ZOMBIE);
+        when(player.getNearbyEntities(anyDouble(), anyDouble(), anyDouble()))
+            .thenReturn(java.util.List.of(hostile));
+
+        FileConfiguration config = mock(FileConfiguration.class);
+        when(plugin.getConfig()).thenReturn(config);
+        when(config.getBoolean("enabled.perktoggleguard", true)).thenReturn(false);
+        when(config.getInt("godmacrointerval")).thenReturn(500);
+        when(config.getInt("perktoggle_entityrange")).thenReturn(16);
+
+        PlayerToggleSneakEvent event = mock(PlayerToggleSneakEvent.class);
+        when(event.getPlayer()).thenReturn(player);
+        when(event.isSneaking()).thenReturn(true);
+
+        GodMacroListener listener = new GodMacroListener(plugin);
+        listener.onPlayerShiftToggleGod(event);
+        listener.onPlayerShiftToggleGod(event);
+
+        verify(player, times(1)).performCommand("god");
+        verify(player, never()).getNearbyEntities(anyDouble(), anyDouble(), anyDouble());
     }
 
     @Test
@@ -207,6 +215,7 @@ class GodMacroListenerTest {
 
         FileConfiguration config = mock(FileConfiguration.class);
         when(plugin.getConfig()).thenReturn(config);
+        when(config.getBoolean("enabled.perktoggleguard", true)).thenReturn(true);
         when(config.getInt("godmacrointerval")).thenReturn(500);
         when(config.getInt("perktoggle_entityrange")).thenReturn(16);
 

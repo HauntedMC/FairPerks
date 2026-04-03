@@ -11,8 +11,6 @@ import static nl.hauntedmc.fairperks.util.CombatUtil.isInCombat;
  */
 public final class PerkToggleGuardUtil {
 
-    private static final int DEFAULT_TOGGLE_BLOCK_RANGE = 16;
-
     private PerkToggleGuardUtil() {
     }
 
@@ -23,6 +21,10 @@ public final class PerkToggleGuardUtil {
      * reused by both command guards and god-macro toggles.
      */
     public static boolean canEnablePerk(Player player, FairPerks plugin) {
+        if (!plugin.getConfig().getBoolean("enabled.perktoggleguard", true)) {
+            return true;
+        }
+
         if (isInCombat(player, plugin)) {
             plugin.getMessageService().sendActionBar(player, "actionbar.deny.perk-toggle.combat");
             return false;
@@ -30,12 +32,12 @@ public final class PerkToggleGuardUtil {
 
         int toggleRange = plugin.getConfig().getInt("perktoggle_entityrange");
         if (toggleRange <= 0) {
-            toggleRange = DEFAULT_TOGGLE_BLOCK_RANGE;
+            return true;
         }
 
         if (player.getNearbyEntities(toggleRange, toggleRange, toggleRange)
-                .stream()
-                .anyMatch(entity -> LegacyUtil.isEnemy(entity.getType()))) {
+            .stream()
+            .anyMatch(entity -> LegacyUtil.isEnemy(entity.getType()))) {
             plugin.getMessageService().sendActionBar(player, "actionbar.deny.perk-toggle.hostile-nearby");
             return false;
         }

@@ -34,8 +34,11 @@ class PerkToggleGuardListenerTest {
         TestFixtures.stubGodMode(plugin, player, false);
         TestFixtures.stubCombatState(plugin, player, true);
         MessageService messageService = TestFixtures.stubMessageService(plugin);
+
         when(plugin.getConfig()).thenReturn(config);
+        when(config.getBoolean("enabled.perktoggleguard", true)).thenReturn(true);
         when(config.getInt("perktoggle_entityrange")).thenReturn(16);
+
         when(event.getValue()).thenReturn(true);
         when(event.getAffected()).thenReturn(affectedUser);
         when(affectedUser.getBase()).thenReturn(player);
@@ -58,9 +61,12 @@ class PerkToggleGuardListenerTest {
 
         TestFixtures.stubCombatState(plugin, player, false);
         MessageService messageService = TestFixtures.stubMessageService(plugin);
+
         when(plugin.getConfig()).thenReturn(config);
+        when(config.getBoolean("enabled.perktoggleguard", true)).thenReturn(true);
         when(config.getInt("perktoggle_entityrange")).thenReturn(16);
         when(player.getNearbyEntities(16, 16, 16)).thenReturn(List.of(hostile));
+
         when(event.getValue()).thenReturn(true);
         when(event.getAffected()).thenReturn(affectedUser);
         when(affectedUser.getBase()).thenReturn(player);
@@ -83,8 +89,11 @@ class PerkToggleGuardListenerTest {
         TestFixtures.stubGodMode(plugin, player, true);
         TestFixtures.stubCombatState(plugin, player, true);
         MessageService messageService = TestFixtures.stubMessageService(plugin);
+
         when(plugin.getConfig()).thenReturn(config);
+        when(config.getBoolean("enabled.perktoggleguard", true)).thenReturn(true);
         when(config.getInt("perktoggle_entityrange")).thenReturn(16);
+
         when(event.getValue()).thenReturn(false);
         when(event.getAffected()).thenReturn(affectedUser);
         when(affectedUser.getBase()).thenReturn(player);
