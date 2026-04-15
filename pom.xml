@@ -18,7 +18,7 @@
         <maven.checkstyle.plugin.version>3.6.0</maven.checkstyle.plugin.version>
         <paper.version>1.21.11-R0.1-SNAPSHOT</paper.version>
         <essentials.version>2.21.2</essentials.version>
-        <adventure.version>4.26.1</adventure.version>
+        <adventure.version>5.0.0</adventure.version>
         <jetbrains.annotations.version>26.1.0</jetbrains.annotations.version>
         <junit.jupiter.version>6.0.3</junit.jupiter.version>
         <mockito.version>5.23.0</mockito.version>
