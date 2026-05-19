@@ -13,10 +13,10 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.release>21</maven.compiler.release>
+        <maven.compiler.release>25</maven.compiler.release>
         <maven.compiler.plugin.version>3.15.0</maven.compiler.plugin.version>
         <maven.checkstyle.plugin.version>3.6.0</maven.checkstyle.plugin.version>
-        <paper.version>1.21.11-R0.1-SNAPSHOT</paper.version>
+        <paper.version>[26.1.2.build,)</paper.version>
         <essentials.version>2.21.2</essentials.version>
         <adventure.version>4.26.1</adventure.version>
         <jetbrains.annotations.version>26.1.0</jetbrains.annotations.version>
@@ -47,7 +47,7 @@
                                     <version>[3.8.1,)</version>
                                 </requireMavenVersion>
                                 <requireJavaVersion>
-                                    <version>[21,)</version>
+                                    <version>[25,)</version>
                                 </requireJavaVersion>
                                 <requirePluginVersions/>
                             </rules>

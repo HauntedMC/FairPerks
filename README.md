@@ -3,7 +3,7 @@
 [![CI Lint](https://github.com/HauntedMC/FairPerks/actions/workflows/ci-lint.yml/badge.svg?branch=main)](https://github.com/HauntedMC/FairPerks/actions/workflows/ci-lint.yml)
 [![CI Tests and Coverage](https://github.com/HauntedMC/FairPerks/actions/workflows/ci-tests-and-coverage.yml/badge.svg?branch=main)](https://github.com/HauntedMC/FairPerks/actions/workflows/ci-tests-and-coverage.yml)
 [![Latest Release](https://img.shields.io/github/v/release/HauntedMC/FairPerks?sort=semver)](https://github.com/HauntedMC/FairPerks/releases/latest)
-[![Java 21](https://img.shields.io/badge/Java-21-007396?logo=openjdk&logoColor=white)](https://adoptium.net/)
+[![Java 25](https://img.shields.io/badge/Java-25-007396?logo=openjdk&logoColor=white)](https://adoptium.net/)
 [![License](https://img.shields.io/github/license/HauntedMC/FairPerks)](LICENSE)
 
 FairPerks helps make EssentialsX perks like `god` and `fly` suitable as donor perks by enforcing fair, EULA-friendly combat and interaction limits on Paper servers.
@@ -22,8 +22,8 @@ Instead of removing those perks entirely, FairPerks adds guardrails so they cann
 
 ## Requirements
 
-- Java 21
-- Paper 1.21.x
+- Java 25
+- Paper API 26.1.2+ (latest available)
 - EssentialsX (required)
 - CombatLogX (optional, enables combat-aware god macro checks)
 
