@@ -20,7 +20,7 @@
         <essentials.version>2.21.2</essentials.version>
         <adventure.version>4.26.1</adventure.version>
         <jetbrains.annotations.version>26.1.0</jetbrains.annotations.version>
-        <junit.jupiter.version>6.0.3</junit.jupiter.version>
+        <junit.jupiter.version>6.1.0</junit.jupiter.version>
         <mockito.version>5.23.0</mockito.version>
         <maven.surefire.version>3.5.5</maven.surefire.version>
         <jacoco.version>0.8.14</jacoco.version>
